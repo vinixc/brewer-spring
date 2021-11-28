@@ -7,20 +7,24 @@
 	<h1>Olá Thymeleaf configurado!</h1>
 </body>
 
-<form method="POST">
+<form method="POST" th:object="${cerveja}">
+	
+	<div th:each="erro : ${#fields.detailedErrors()}">
+		<span th:text="${erro.message}"></span>
+	</div>
 
 	<span th:text="${mensagem}"></span>
 	<br>
 	<label>SKU</label>
-	<input type="text" name="sku">
+	<input type="text" th:field="*{sku}">
 	<br>
 	
 	<label>Nome</label>
-	<input type="text" name="nome">
+	<input type="text" th:field="*{nome}">
 	<br>
 	
 	<label>Descrição</label>
-	<textarea rows="3" cols="20" name="descricao"></textarea>
+	<textarea rows="3" cols="20" th:field="*{descricao}"></textarea>
 	<br>
 	
 	<input type="submit" value="Salvar">

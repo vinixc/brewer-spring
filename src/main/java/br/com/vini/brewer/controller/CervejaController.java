@@ -15,7 +15,7 @@ import br.com.vini.brewer.model.Cerveja;
 public class CervejaController {
 	
 	@RequestMapping("/cerveja/novo")
-	public String novo() {
+	public String novo(Cerveja cerveja) {
 		return "cerveja/cadastroCerveja";
 	}
 	
@@ -23,8 +23,7 @@ public class CervejaController {
 	public String cadastrar(@Valid Cerveja cerveja, BindingResult result, Model model, RedirectAttributes attributes) {
 		
 		if(result.hasErrors()) {
-			model.addAttribute("mensagem","Erro no formulario");
-			return "cerveja/cadastroCerveja";
+			return novo(cerveja);
 		}
 		
 		System.out.println("SKU " + cerveja.toString());
