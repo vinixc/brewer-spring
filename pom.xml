@@ -15,6 +15,8 @@
 
 		<java.version>1.8</java.version>
 		<maven-compiler-pluging.version>3.2</maven-compiler-pluging.version>
+		
+		<flyway-maven-plugin.version>4.0.2</flyway-maven-plugin.version>
 
 		<!-- Spring MVC -->
 		<spring-framework.version>4.3.0.RELEASE</spring-framework.version>
@@ -37,6 +39,9 @@
 		
 		<!-- JPA / Hibernate -->
 		<hibernate.version>5.1.0.Final</hibernate.version>
+		
+		<!-- Driver Postegres  -->
+		<postgres-driver.version>42.3.1</postgres-driver.version>
 	</properties>
 
 	<build>
@@ -47,6 +52,15 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>${flyway-maven-plugin.version}</version>
+				<configuration>
+					<driver>org.postgresql.Driver</driver>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -153,6 +167,14 @@
     		<artifactId>hibernate-java8</artifactId>
     		<version>${hibernate.version}</version>
     		<scope>compile</scope>
+		</dependency>
+		
+		<!-- Driver Postgres -->
+		<dependency>
+		    <groupId>org.postgresql</groupId>
+		    <artifactId>postgresql</artifactId>
+		    <version>${postgres-driver.version}</version>
+		    <scope>provided</scope>
 		</dependency>
 		
 	</dependencies>
