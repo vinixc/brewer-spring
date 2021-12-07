@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.model.Cerveja;
-import br.com.vini.brewer.repository.Cervejas;
+import br.com.vini.brewer.repository.CervejaRepository;
 
 @Controller
 public class CervejaController {
@@ -21,13 +21,10 @@ public class CervejaController {
 	private static final Logger logger = LoggerFactory.getLogger(CervejaController.class);
 	
 	@Autowired
-	private Cervejas cervejas;
+	private CervejaRepository cervejaRepository;
 	
 	@RequestMapping("/cerveja/novo")
 	public String novo(Cerveja cerveja) {
-		
-		cervejas.findAll();
-		
 		return "cerveja/cadastroCerveja";
 	}
 	

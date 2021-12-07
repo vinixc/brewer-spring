@@ -15,10 +15,10 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import br.com.vini.brewer.model.Cerveja;
-import br.com.vini.brewer.repository.Cervejas;
+import br.com.vini.brewer.repository.CervejaRepository;
 
 @Configuration
-@EnableJpaRepositories(basePackageClasses = Cervejas.class)
+@EnableJpaRepositories(basePackageClasses = CervejaRepository.class)
 public class JPAConfig {
 	
 	@Bean
