@@ -32,7 +32,7 @@ public class JPAConfig {
 	public JpaVendorAdapter jpaVendorAdapter() {
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
 		adapter.setDatabase(Database.POSTGRESQL);
-		adapter.setShowSql(Boolean.TRUE);
+		adapter.setShowSql(Boolean.FALSE);
 		adapter.setGenerateDdl(Boolean.FALSE);
 		adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
 		return adapter;
