@@ -42,6 +42,9 @@
 		
 		<!-- Driver Postegres  -->
 		<postgres-driver.version>42.3.1</postgres-driver.version>
+		
+		<!-- Spring Data JPA -->
+		<spring-data-jpa.version>1.10.2.RELEASE</spring-data-jpa.version>
 	</properties>
 
 	<build>
@@ -175,6 +178,13 @@
 		    <artifactId>postgresql</artifactId>
 		    <version>${postgres-driver.version}</version>
 		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- Spring Data JPA -->
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-jpa</artifactId>
+		    <version>${spring-data-jpa.version}</version>
 		</dependency>
 		
 	</dependencies>

@@ -9,6 +9,8 @@
 	
 	<Loggers>
 		<Logger name="br.com.vini.brewer.controller" level="info"/>
+		
+		<Logger name="org.hibernate.SQL" level="debug"/>
 	
 		<Root level="error">
 			<AppenderRef ref="Console" />
