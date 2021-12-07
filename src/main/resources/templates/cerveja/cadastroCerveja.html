@@ -55,7 +55,7 @@
 						
 						<div class="bw-field-action">
 						
-						<select id="estilo" class="form-control">
+						<select id="estilo" class="form-control" th:field="*{estilo}">
 							<option value="">Selecione o estilo</option>
 							<option th:each="estilo : ${estilos}" th:value="${estilo.id}" th:text="${estilo.nome}">Pale lager</option>
 						
