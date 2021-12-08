@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -38,6 +39,7 @@ public class Cerveja implements Serializable{
 	@Size(max = 50,message = "Descrição deve ter o tamanho entre 1 e 50")
 	private String descricao;
 	
+	@NotNull
 	private BigDecimal valor;
 	
 	@Column(name = "teor_alcoolico")
@@ -45,15 +47,19 @@ public class Cerveja implements Serializable{
 	
 	private BigDecimal comissao;
 	
+	@NotNull
 	@Column(name = "quantidade_estoque")
 	private Integer quantidadeEstoque;
 	
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Origem origem;
 	
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Sabor sabor;
 	
+	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_estilo")
 	private Estilo estilo;

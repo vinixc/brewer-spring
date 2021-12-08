@@ -16,8 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.model.Origem;
 import br.com.vini.brewer.model.Sabor;
-import br.com.vini.brewer.repository.CervejaRepository;
 import br.com.vini.brewer.repository.EstiloRepository;
+import br.com.vini.brewer.service.CadastroCervejaService;
 
 @Controller
 public class CervejaController {
@@ -25,7 +25,7 @@ public class CervejaController {
 	private static final Logger logger = LoggerFactory.getLogger(CervejaController.class);
 	
 	@Autowired
-	private CervejaRepository cervejaRepository;
+	private CadastroCervejaService cadastroCervejaService;
 	
 	@Autowired
 	private EstiloRepository estiloRepository;
@@ -43,11 +43,11 @@ public class CervejaController {
 	@RequestMapping(value = "/cerveja/novo", method = RequestMethod.POST)
 	public ModelAndView cadastrar(@Valid Cerveja cerveja, BindingResult result, Model model, RedirectAttributes attributes) {
 		
-//		if(result.hasErrors()) {
-//			return novo(cerveja);
-//		}
+		if(result.hasErrors()) {
+			return novo(cerveja);
+		}
 		
-		System.out.println("SKU " + cerveja.toString());
+		cadastroCervejaService.salvar(cerveja);
 		attributes.addFlashAttribute("mensagem","Cerveja salva com sucesso!");
 		
 		return new ModelAndView("redirect:/cerveja/novo");
