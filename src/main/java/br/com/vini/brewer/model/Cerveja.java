@@ -39,7 +39,7 @@ public class Cerveja implements Serializable{
 	@Size(max = 50,message = "Descrição deve ter o tamanho entre 1 e 50")
 	private String descricao;
 	
-	@NotNull
+	@NotNull(message = "Valor é obrigatorio")
 	private BigDecimal valor;
 	
 	@Column(name = "teor_alcoolico")
@@ -47,19 +47,19 @@ public class Cerveja implements Serializable{
 	
 	private BigDecimal comissao;
 	
-	@NotNull
+	@NotNull(message = "Estoque é obrigatorio ")
 	@Column(name = "quantidade_estoque")
 	private Integer quantidadeEstoque;
 	
-	@NotNull
+	@NotNull(message = "Origem é obrigatoria")
 	@Enumerated(EnumType.STRING)
 	private Origem origem;
 	
-	@NotNull
+	@NotNull(message = "Sabor é obrigatorio")
 	@Enumerated(EnumType.STRING)
 	private Sabor sabor;
 	
-	@NotNull
+	@NotNull(message = "Estilo é obrigatorio")
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_estilo")
 	private Estilo estilo;
