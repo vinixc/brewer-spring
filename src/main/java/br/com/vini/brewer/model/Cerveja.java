@@ -20,6 +20,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import br.com.vini.brewer.validation.SKU;
+
 @Entity
 @Table(name = "cerveja")
 @SequenceGenerator(allocationSize = 1, initialValue = 1, sequenceName = "cerveja_seq", name = "cerveja_seq")
@@ -30,6 +32,7 @@ public class Cerveja implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cerveja_seq")
 	private Long id;
 	
+	@SKU
 	@NotBlank(message = "SKU é obrigatorio")
 	private String sku;
 	
