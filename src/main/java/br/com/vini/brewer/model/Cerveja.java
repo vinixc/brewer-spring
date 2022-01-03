@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -43,6 +46,8 @@ public class Cerveja implements Serializable{
 	private String descricao;
 	
 	@NotNull(message = "Valor é obrigatorio")
+	@DecimalMax(value = "9999999.99", message = "O valor da cerveja deve ser menor que R$9.999.999,99")
+	@DecimalMin(value = "0.01", message = "O valor da cerveja deve ser maior que R$0.01")
 	private BigDecimal valor;
 	
 	@Column(name = "teor_alcoolico")
