@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "estilo")
@@ -21,6 +23,8 @@ public class Estilo implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "estilo_seq")
 	private Long id;
 	
+	@NotNull(message = "Nome é obrigatorio.")
+	@Size(max = 50, min = 3, message = "Nome deve ter entre 3 e 50 caracteres")
 	private String nome;
 	
 	@OneToMany(mappedBy = "estilo")
