@@ -17,7 +17,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -50,9 +49,13 @@ public class Cerveja implements Serializable{
 	@DecimalMin(value = "0.01", message = "O valor da cerveja deve ser maior que R$0.01")
 	private BigDecimal valor;
 	
+	@DecimalMax(value = "100.0", message = "O Teor alcoolico deve ser igual ou menor que 100")
+	@NotNull(message = "O teor alcoolico é obrigatorio.")
 	@Column(name = "teor_alcoolico")
 	private BigDecimal teorAlcoolico;
 	
+	@NotNull(message = "A comissão é obrigatoria")
+	@DecimalMax(value = "100.0", message = "A comissão deve ser igual ou menor que 100")
 	private BigDecimal comissao;
 	
 	@NotNull(message = "Estoque é obrigatorio ")
