@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.vini.brewer.exceptional.NomeEstiloJaCadastradoException;
+import br.com.vini.brewer.exception.NomeEstiloJaCadastradoException;
 import br.com.vini.brewer.model.Estilo;
 import br.com.vini.brewer.repository.EstiloRepository;
 
