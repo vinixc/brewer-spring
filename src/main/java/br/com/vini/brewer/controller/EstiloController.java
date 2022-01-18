@@ -51,7 +51,7 @@ public class EstiloController {
 		return new ModelAndView("redirect:/estilo/novo");
 	}
 	
-	@RequestMapping(value = "/estilos", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public @ResponseBody ResponseEntity<?> salvar(@RequestBody @Valid Estilo estilo, BindingResult result) {
 		
 		if(result.hasErrors()) {
