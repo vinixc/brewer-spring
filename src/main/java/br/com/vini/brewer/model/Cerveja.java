@@ -77,6 +77,12 @@ public class Cerveja implements Serializable{
 	@JoinColumn(name = "id_estilo")
 	private Estilo estilo;
 	
+	@Column(name = "foto")
+	private String foto;
+	
+	@Column(name = "content_type")
+	private String contentType;
+	
 	@PrePersist @PreUpdate
 	private void prePersistUpdate() {
 		this.sku = this.sku.toUpperCase();
@@ -145,6 +151,26 @@ public class Cerveja implements Serializable{
 	public void setEstilo(Estilo estilo) {
 		this.estilo = estilo;
 	}
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

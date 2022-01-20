@@ -1,0 +1,2 @@
+ALTER TABLE cerveja ADD COLUMN foto VARCHAR(100);
+ALTER TABLE cerveja ADD COLUMN content_type VARCHAR(100);
