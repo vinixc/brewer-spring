@@ -8,7 +8,7 @@
 	</Appenders>
 	
 	<Loggers>
-		<Logger name="br.com.vini.brewer.controller" level="info"/>
+		<Logger name="br.com.vini.brewer" level="debug"/>
 		
 		<Logger name="org.hibernate.SQL" level="debug"/>
 	
