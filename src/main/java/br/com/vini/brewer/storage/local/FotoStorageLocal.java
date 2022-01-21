@@ -45,6 +45,15 @@ public class FotoStorageLocal implements FotoStorage{
 		return novoNome;
 	}
 	
+	@Override
+	public byte[] recuperarFotoTemporaria(String nomeFoto) {
+		try {
+			return Files.readAllBytes(this.localTemporario.resolve(nomeFoto));
+		} catch (IOException e) {
+			throw new RuntimeException("Erro lendo a foto temporaria", e);
+		}
+	}
+	
 	private void criarPastas() {
 		try {
 			Files.createDirectories(this.local);
