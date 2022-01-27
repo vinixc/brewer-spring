@@ -2,11 +2,13 @@ package br.com.vini.brewer.repository.helper.cerveja;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.repository.filter.CervejaFilter;
 
 public interface CervejaRepositoryQuery {
 	
-	public List<Cerveja> filtrar(CervejaFilter filter);
+	public List<Cerveja> filtrar(CervejaFilter filter, Pageable pageable);
 
 }
