@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -44,5 +46,39 @@ public class PageWrapper<T> {
 	
 	public String urlForPage(int page) {
 		return uriBuilder.replaceQueryParam("page", page).build(true).encode().toUriString();
+	}
+	
+	public String urlOrdenada(String property) {
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder
+				.fromUriString(uriBuilder.build(true).encode().toString());
+		
+		String valorSort = property + "," + inverterDirecao(property);
+		
+		return uriComponentsBuilder.replaceQueryParam("sort", valorSort).build(true).encode().toUriString();
+	}
+	
+	public String inverterDirecao(String property) {
+		String direcao = "asc";
+		
+		Order order = page.getSort() != null ? page.getSort().getOrderFor(property) : null;
+		if(order != null) {
+			direcao = Sort.Direction.ASC.equals(order.getDirection()) ? "desc" : "asc";
+		}
+		
+		return direcao;
+	}
+	
+	public boolean descendente(String property) {
+		return inverterDirecao(property).equals("asc");
+	}
+	
+	public boolean ordenada(String property) {
+		Order order = page.getSort() != null ? page.getSort().getOrderFor(property) : null;
+		
+		if(order == null) {
+			return false;
+		}
+		
+		return page.getSort().getOrderFor(property) != null ? true : false;
 	}
 }
