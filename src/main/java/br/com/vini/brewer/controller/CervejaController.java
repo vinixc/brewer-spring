@@ -1,5 +1,6 @@
 package br.com.vini.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.model.Origem;
 import br.com.vini.brewer.model.Sabor;
@@ -64,15 +66,17 @@ public class CervejaController {
 	}
 	
 	@GetMapping
-	public ModelAndView pesquisar(CervejaFilter cervejaFilter, BindingResult bindingResult, @PageableDefault(size = 2) Pageable pageable) {
+	public ModelAndView pesquisar(CervejaFilter cervejaFilter, BindingResult bindingResult,
+			@PageableDefault(size = 2) Pageable pageable, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("cerveja/pesquisaCerveja");
 		mv.addObject("estilos", estiloRepository.findAll());
 		mv.addObject("sabores", Sabor.values());
 		mv.addObject("origens", Origem.values());
 		
-		Page<Cerveja> pagina = cervejaRepository.filtrar(cervejaFilter,pageable);
+		Page<Cerveja> page = cervejaRepository.filtrar(cervejaFilter,pageable);
+		PageWrapper<Cerveja> paginaWrapper = new PageWrapper<>(page,request);
 		
-		mv.addObject("pagina", pagina);
+		mv.addObject("pagina", paginaWrapper);
 		return mv;
 	}
 }
