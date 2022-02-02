@@ -13,17 +13,18 @@ import br.com.vini.brewer.repository.filter.Filter;
 public abstract class AbstractRepositoryImpl<T>{
 	
 	protected Criteria criteria;
+	protected Criteria criteriaCount;
 	
 	public AbstractRepositoryImpl() {}
 	
 	@SuppressWarnings("unchecked")
 	public Page<T> filtrar(Filter filter, Pageable pageable) {
-		
+		initCriterias();
 		adicionarRestricoesDePaginacao(pageable);
 		adicionaOrdenacao(pageable);
 		
 		if(filter != null) {
-			adicionaRestricoes(filter);
+			adicionaRestricoes(filter,criteria);
 		}
 		
 		return new PageImpl<T>(criteria.list(), pageable, total(filter));
@@ -31,12 +32,12 @@ public abstract class AbstractRepositoryImpl<T>{
 	
 	private Long total(Filter filter) {
 		if(filter != null) {
-			adicionaRestricoes(filter);
+			adicionaRestricoes(filter,criteriaCount);
 		}
 		
-		criteria.setProjection(Projections.rowCount());
+		criteriaCount.setProjection(Projections.rowCount());
 		
-		return (Long) criteria.uniqueResult();
+		return (Long) criteriaCount.uniqueResult();
 	}
 
 	private void adicionarRestricoesDePaginacao(Pageable pageable) {
@@ -57,5 +58,7 @@ public abstract class AbstractRepositoryImpl<T>{
 		}
 	}
 	
-	public  abstract void adicionaRestricoes(Filter filter);
+	public  abstract void adicionaRestricoes(Filter filter,Criteria criteria);
+
+	public abstract void initCriterias();
 }

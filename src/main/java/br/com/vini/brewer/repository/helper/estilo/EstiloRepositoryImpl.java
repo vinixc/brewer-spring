@@ -3,6 +3,7 @@ package br.com.vini.brewer.repository.helper.estilo;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -22,13 +23,13 @@ public class EstiloRepositoryImpl extends AbstractRepositoryImpl<Estilo> impleme
 	private EntityManager manager;
 	
 	@Override
-	public void adicionaRestricoes(Filter filter) {
+	public void adicionaRestricoes(Filter filter,Criteria criteria) {
 		
 		if(filter != null) {
 			EstiloFilter estiloFilter = (EstiloFilter) filter;
 			
 			if(!StringUtils.isEmpty(estiloFilter.getNome())) {
-				this.criteria.add(Restrictions.ilike("nome",estiloFilter.getNome(), MatchMode.ANYWHERE));
+				criteria.add(Restrictions.ilike("nome",estiloFilter.getNome(), MatchMode.ANYWHERE));
 			}
 		}
 	}
@@ -36,7 +37,12 @@ public class EstiloRepositoryImpl extends AbstractRepositoryImpl<Estilo> impleme
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Estilo> filtrar(EstiloFilter estiloFilter, Pageable pageable) {
-		super.criteria = manager.unwrap(Session.class).createCriteria(Estilo.class);
 		return super.filtrar(estiloFilter, pageable);
+	}
+
+	@Override
+	public void initCriterias() {
+		criteria = manager.unwrap(Session.class).createCriteria(Estilo.class);
+		criteriaCount = manager.unwrap(Session.class).createCriteria(Estilo.class);
 	}
 }

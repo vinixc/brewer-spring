@@ -109,3 +109,17 @@ COMPONENTES
 .table-cervejas-col-acoes {
 	width: 80px;
 }
+
+.table-estilo-id{
+	width: 8px;
+	text-align: center;
+	align-items: center;
+}
+
+.table-estilo-col-acoes{
+	width: 80px;
+}
+
+.table-estilo-nome{
+	
+}

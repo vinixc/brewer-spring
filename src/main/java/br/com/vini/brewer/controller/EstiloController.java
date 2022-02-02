@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -74,7 +75,8 @@ public class EstiloController {
 	}
 	
 	@GetMapping
-	public ModelAndView pesquisar(EstiloFilter estiloFilter, BindingResult bindingResult, Pageable pageable, HttpServletRequest httpServletRequest) {
+	public ModelAndView pesquisar(EstiloFilter estiloFilter, BindingResult bindingResult, 
+			@PageableDefault(size = 5) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("estilo/pesquisaEstilo");
 		
 		Page<Estilo> page = repository.filtrar(estiloFilter, pageable);
