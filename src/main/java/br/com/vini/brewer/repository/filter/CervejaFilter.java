@@ -6,7 +6,7 @@ import br.com.vini.brewer.model.Estilo;
 import br.com.vini.brewer.model.Origem;
 import br.com.vini.brewer.model.Sabor;
 
-public class CervejaFilter {
+public class CervejaFilter implements Filter{
 	
 	private String sku;
 	private String nome;

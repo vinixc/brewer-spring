@@ -58,7 +58,7 @@ public abstract class AbstractRepositoryImpl<T>{
 		}
 	}
 	
-	public  abstract void adicionaRestricoes(Filter filter,Criteria criteria);
+	protected  abstract void adicionaRestricoes(Filter filter,Criteria criteria);
 
-	public abstract void initCriterias();
+	protected abstract void initCriterias();
 }

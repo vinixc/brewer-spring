@@ -6,99 +6,68 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.repository.filter.CervejaFilter;
+import br.com.vini.brewer.repository.filter.Filter;
+import br.com.vini.brewer.repository.helper.abs.AbstractRepositoryImpl;
 
-public class CervejaRepositoryImpl implements CervejaRepositoryQuery{
+public class CervejaRepositoryImpl extends AbstractRepositoryImpl<Cerveja> implements CervejaRepositoryQuery{
 
 	@PersistenceContext
 	private EntityManager manager;
 	
 	@Override
 	@Transactional(readOnly = true)
-	@SuppressWarnings("unchecked")
 	public Page<Cerveja> filtrar(CervejaFilter filter, Pageable pageable) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
+		return super.filtrar(filter, pageable);
+	}
+	
+	@Override
+	protected void adicionaRestricoes(Filter filter, Criteria criteria) {
+		CervejaFilter cervejaFilter = (CervejaFilter) filter;
 		
-		int totalRegistersForpage = pageable.getPageSize();
-		int currentPage = pageable.getPageNumber();
-		int firstRegister = currentPage * totalRegistersForpage;
-				
-		criteria.setFirstResult(firstRegister);
-		criteria.setMaxResults(totalRegistersForpage);
-		
-		adicionaOrdenacao(pageable, criteria);
-		
-		if(filter != null) {
-			adicionaRestricoes(filter, criteria);
+		if(!StringUtils.isEmpty(cervejaFilter.getSku())) {
+			criteria.add(Restrictions.ilike("sku",  "%" + cervejaFilter.getSku() + "%"));
 		}
 		
-		return new PageImpl<>(criteria.list(), pageable, total(filter));
-	}
-
-	private Long total(CervejaFilter filter) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
-		
-		if(filter != null) {
-			adicionaRestricoes(filter, criteria);
+		if(!StringUtils.isEmpty(cervejaFilter.getNome())) {
+			criteria.add(Restrictions.ilike("nome",cervejaFilter.getNome(), MatchMode.ANYWHERE));
 		}
 		
-		criteria.setProjection(Projections.rowCount());
+		if(isEstiloPresent(cervejaFilter)) {
+			criteria.add(Restrictions.eq("estilo", cervejaFilter.getEstilo()));
+		}
 		
-		return (Long) criteria.uniqueResult();
+		if(cervejaFilter.getSabor() != null) {
+			criteria.add(Restrictions.eq("sabor", cervejaFilter.getSabor()));
+		}
+		
+		if(cervejaFilter.getOrigem() != null) {
+			criteria.add(Restrictions.eq("origem", cervejaFilter.getOrigem()));
+		}
+		
+		if(cervejaFilter.getValorDe() != null) {
+			criteria.add(Restrictions.ge("valor", cervejaFilter.getValorDe()));
+		}
+		
+		if(cervejaFilter.getValorAte() != null) {
+			criteria.add(Restrictions.le("valor", cervejaFilter.getValorAte()));
+		}
 	}
 
+	@Override
+	protected void initCriterias() {
+		criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
+		criteriaCount = manager.unwrap(Session.class).createCriteria(Cerveja.class);
+	}
+	
 	private boolean isEstiloPresent(CervejaFilter filter) {
 		return filter.getEstilo() != null && filter.getEstilo().getId() != null;
 	}
-	
-	private void adicionaOrdenacao(Pageable pageable, Criteria criteria) {
-		Sort sort = pageable.getSort();
-		if(sort != null) {
-			Sort.Order order = sort.iterator().next();
-			String field = order.getProperty();
-			criteria.addOrder(order.isAscending() ? Order.asc(field) : Order.desc(field));
-		}
-	}
-	
-	private void adicionaRestricoes(CervejaFilter filter, Criteria criteria) {
-		if(!StringUtils.isEmpty(filter.getSku())) {
-			criteria.add(Restrictions.ilike("sku",  "%" + filter.getSku() + "%"));
-		}
-		
-		if(!StringUtils.isEmpty(filter.getNome())) {
-			criteria.add(Restrictions.ilike("nome",filter.getNome(), MatchMode.ANYWHERE));
-		}
-		
-		if(isEstiloPresent(filter)) {
-			criteria.add(Restrictions.eq("estilo", filter.getEstilo()));
-		}
-		
-		if(filter.getSabor() != null) {
-			criteria.add(Restrictions.eq("sabor", filter.getSabor()));
-		}
-		
-		if(filter.getOrigem() != null) {
-			criteria.add(Restrictions.eq("origem", filter.getOrigem()));
-		}
-		
-		if(filter.getValorDe() != null) {
-			criteria.add(Restrictions.ge("valor", filter.getValorDe()));
-		}
-		
-		if(filter.getValorAte() != null) {
-			criteria.add(Restrictions.le("valor", filter.getValorAte()));
-		}
-	}
-
 }
