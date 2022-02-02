@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:th="http://thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="'layout/layoutPadrao'"
+	xmlns:brewer="http://brewer.com">
+	
+<head>
+	<title>Pesquisa de Estilo</title>
+	
+</head>
+
+<body>
+
+	<section class="aw-layout-content  js-content" layout:fragment="conteudo">
+	
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-10">
+						<h1> Pesquisa de Estilo </h1>
+					</div>
+					
+					<div class="col-sm-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/estilo/novo}">
+								<i class="glyphicon glyphicon-plus-sign"></i> <span class="hidden-xs hidden-sm">Novo estilo</span>
+							</a>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+		
+			<form method="GET" th:object="${estiloFilter}">
+			
+				<div class="row">
+				
+					<div class="form-group col-sm-6">
+						<label class="control-label" for="nome">Nome</label>
+						<input type="text" class="form-control" id="nome" th:field="*{nome}"/>
+					</div>
+				
+				</div>
+			
+				<button type="submit" class="btn btn-primary">Pesquisar</button>
+			</form>
+		
+		</div>
+	
+	</section>
+
+</body>
+
+</html>

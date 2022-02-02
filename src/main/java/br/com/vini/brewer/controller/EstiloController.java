@@ -1,13 +1,17 @@
 package br.com.vini.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,8 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.exception.NomeEstiloJaCadastradoException;
 import br.com.vini.brewer.model.Estilo;
+import br.com.vini.brewer.repository.EstiloRepository;
+import br.com.vini.brewer.repository.filter.EstiloFilter;
 import br.com.vini.brewer.service.CadastroEstiloService;
 
 @Controller
@@ -25,6 +32,9 @@ public class EstiloController {
 	
 	@Autowired
 	private CadastroEstiloService cadastroEstiloService;
+	
+	@Autowired
+	private EstiloRepository repository;
 	
 	@RequestMapping("/novo")
 	public ModelAndView novo(Estilo estilo) {
@@ -61,6 +71,18 @@ public class EstiloController {
 		estilo = cadastroEstiloService.salvar(estilo);
 		
 		return ResponseEntity.ok(estilo);
+	}
+	
+	@GetMapping
+	public ModelAndView pesquisar(EstiloFilter estiloFilter, BindingResult bindingResult, Pageable pageable, HttpServletRequest httpServletRequest) {
+		ModelAndView mv = new ModelAndView("estilo/pesquisaEstilo");
+		
+		Page<Estilo> page = repository.filtrar(estiloFilter, pageable);
+		PageWrapper<Estilo> pageWrapper = new PageWrapper<>(page, httpServletRequest);
+		
+		mv.addObject("pagina", pageWrapper);
+		
+		return mv;
 	}
 
 }
