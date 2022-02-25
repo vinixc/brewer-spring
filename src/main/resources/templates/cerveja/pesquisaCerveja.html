@@ -145,28 +145,7 @@
 			</table>
 		</div>
 		
-		<div class="col-sm-12 text-center" th:if="${not pagina.empty}">
-			<nav>
-				<ul class="pagination pagination-sm" th:with="paginaAtual=${pagina.atual}">
-					
-					<li th:class="${pagina.first} ? disabled">
-						<a th:remove="${pagina.first} ? tag " th:href="${pagina.urlForPage(paginaAtual - 1)}"><span>&laquo;</span></a>
-					</li>
-					
-					<th:block th:each="p : ${#numbers.sequence(1,pagina.total)}" th:with="numeroPagina=${p - 1}">
-						<li th:class="${paginaAtual == numeroPagina} ? active">
-							<a th:href="${pagina.urlForPage(numeroPagina)}">[[${p}]]</a>
-						</li>
-					</th:block>
-					
-					 
-					<li th:class="${pagina.last} ? disabled">
-						<a th:remove="${pagina.last} ? tag " th:href="${pagina.urlForPage(paginaAtual + 1)}"><span>&raquo;</span></a>
-					</li>
-					
-				</ul>
-			</nav>
-		</div>
+		<brewer:pagination page="${pagina}"/>
 		
 	</div>
 
