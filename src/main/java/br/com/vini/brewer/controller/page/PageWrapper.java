@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class PageWrapper<T> {
@@ -17,7 +16,14 @@ public class PageWrapper<T> {
 
 	public PageWrapper(Page<T> page, HttpServletRequest request) {
 		this.page = page;
-		this.uriBuilder = ServletUriComponentsBuilder.fromRequest(request);
+//		this.uriBuilder = ServletUriComponentsBuilder.fromRequest(request);
+		
+		//Comentando linha acima a fim de corrigir a pesquisa com espaço
+		String httpUrl = request.getRequestURL().append(
+				request.getQueryString() != null ? "?" + request.getQueryString() : ""
+		).toString().replaceAll("\\+", "%20");
+		
+		this.uriBuilder = UriComponentsBuilder.fromHttpUrl(httpUrl);
 	}
 	
 	public List<T> getContent(){
