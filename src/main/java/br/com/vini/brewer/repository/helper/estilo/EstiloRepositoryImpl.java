@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
@@ -41,8 +40,7 @@ public class EstiloRepositoryImpl extends AbstractRepositoryImpl<Estilo> impleme
 	}
 
 	@Override
-	public void initCriterias() {
-		criteria = manager.unwrap(Session.class).createCriteria(Estilo.class);
-		criteriaCount = manager.unwrap(Session.class).createCriteria(Estilo.class);
+	protected EntityManager getEntityManage() {
+		return this.manager;
 	}
 }

@@ -1,6 +1,12 @@
 package br.com.vini.brewer.repository.helper.abs;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
+import javax.persistence.EntityManager;
+
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.data.domain.Page;
@@ -27,7 +33,8 @@ public abstract class AbstractRepositoryImpl<T>{
 			adicionaRestricoes(filter,criteria);
 		}
 		
-		return new PageImpl<T>(criteria.list(), pageable, total(filter));
+		Long total = total(filter);
+		return new PageImpl<T>(criteria.list(), pageable, total);
 	}
 	
 	private Long total(Filter filter) {
@@ -57,8 +64,19 @@ public abstract class AbstractRepositoryImpl<T>{
 			criteria.addOrder(order.isAscending() ? Order.asc(field) : Order.desc(field));
 		}
 	}
+	private void initCriterias() {
+		ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+		Type type = genericSuperclass.getActualTypeArguments()[0];
+		this.criteria = getEntityManage().unwrap(Session.class).createCriteria(type.getTypeName());
+		this.criteriaCount = getEntityManage().unwrap(Session.class).createCriteria(type.getTypeName());
+	}
 	
+	/**
+	 * Metodo utilizado para adicionar as restricoes utilizadas nos filtros da pesquisa
+	 * Criar object de filter que implemente Filter 
+	 * @param filter
+	 * @param criteria
+	 */
 	protected  abstract void adicionaRestricoes(Filter filter,Criteria criteria);
-
-	protected abstract void initCriterias();
+	protected abstract EntityManager getEntityManage();
 }

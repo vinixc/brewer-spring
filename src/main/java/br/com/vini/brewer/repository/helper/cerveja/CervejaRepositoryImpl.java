@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.data.domain.Page;
@@ -61,13 +60,12 @@ public class CervejaRepositoryImpl extends AbstractRepositoryImpl<Cerveja> imple
 		}
 	}
 
-	@Override
-	protected void initCriterias() {
-		criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
-		criteriaCount = manager.unwrap(Session.class).createCriteria(Cerveja.class);
-	}
-	
 	private boolean isEstiloPresent(CervejaFilter filter) {
 		return filter.getEstilo() != null && filter.getEstilo().getId() != null;
+	}
+
+	@Override
+	protected EntityManager getEntityManage() {
+		return this.manager;
 	}
 }
