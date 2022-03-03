@@ -15,11 +15,20 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.group.GroupSequenceProvider;
+
+import br.com.vini.brewer.model.validation.ClienteGroupSequenceProvider;
+import br.com.vini.brewer.model.validation.group.CnpjGroup;
+import br.com.vini.brewer.model.validation.group.CpfGroup;
 
 @Entity
 @Table(name = "cliente")
 @SequenceGenerator(allocationSize = 1,initialValue = 1, name = "cliente_seq", sequenceName = "cliente_seq")
+@GroupSequenceProvider(ClienteGroupSequenceProvider.class)
 public class Cliente implements Serializable{
 	private static final long serialVersionUID = -7500292048102423872L;
 	
@@ -38,11 +47,15 @@ public class Cliente implements Serializable{
 	
 	@Column(name = "cpf_cnpj")
 	@Size(max = 30, message = "cpf ou cnpj deve ter no máximo 30 caracteres")
+	@NotBlank(message = "cpf ou cnpj é obrigatorio")
+	@CPF(groups = CpfGroup.class)
+	@CNPJ(groups = CnpjGroup.class)
 	private String cpfOuCnpj;
 	
 	@Size(max = 20, message = "telefone deve ter no máximo 20 caracteres")
 	private String telefone;
 	
+	@Email(message = "e-mail invalido")
 	@Size(max = 50, message = "email deve ter no máximo 50 caracteres")
 	private String email;
 	
