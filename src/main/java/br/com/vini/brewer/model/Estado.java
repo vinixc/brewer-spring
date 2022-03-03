@@ -3,12 +3,9 @@ package br.com.vini.brewer.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -16,28 +13,28 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@Table(name = "cidade")
-@SequenceGenerator(allocationSize = 1,initialValue = 1, name = "cidade_seq", sequenceName = "cidade_seq")
-public class Cidade implements Serializable{
-	private static final long serialVersionUID = -8354010227056564710L;
+@Table(name = "estado")
+@SequenceGenerator(name = "estado_seq", sequenceName = "estado_seq", allocationSize = 1, initialValue = 1)
+public class Estado implements Serializable{
+	private static final long serialVersionUID = 1618359222671758231L;
 	
 	@Id
-	@GeneratedValue(generator = "cidade_seq", strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(generator = "estado_seq", strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@NotBlank(message = "Nome é obrigatorio")
 	@Size(min = 3,max = 50, message = "Nome deve ter entre 3 e 50 caracteres.")
+	@NotBlank(message = "nome é obrigatorio")
 	private String nome;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "estado_id")
-	private Estado estado;
+	@Size(min = 2,max = 2, message = "Sigla deve ter 2 caracteres.")
+	@NotBlank(message = "sigla é obrigatorio")
+	private String sigla;
 
-	public Cidade() { }
+	public Estado() {}
 
-	public Cidade(String nome, Estado estado) {
+	public Estado(String nome, String sigla) {
 		this.nome = nome;
-		this.estado = estado;
+		this.sigla = sigla;
 	}
 
 	public String getNome() {
@@ -48,12 +45,12 @@ public class Cidade implements Serializable{
 		this.nome = nome;
 	}
 
-	public Estado getEstado() {
-		return estado;
+	public String getSigla() {
+		return sigla;
 	}
 
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+	public void setSigla(String sigla) {
+		this.sigla = sigla;
 	}
 
 	public Long getId() {
@@ -76,7 +73,7 @@ public class Cidade implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cidade other = (Cidade) obj;
+		Estado other = (Estado) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -87,7 +84,6 @@ public class Cidade implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Cidade [id=" + id + ", nome=" + nome + ", estado=" + estado + "]";
+		return "Estado [id=" + id + ", nome=" + nome + ", sigla=" + sigla + "]";
 	}
-
 }
