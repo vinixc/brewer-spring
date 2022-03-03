@@ -41,6 +41,30 @@ Brewer.MaskPhoneNumber = (function(){
 	return MaskPhoneNumber;
 }());
 
+Brewer.MaskCEP = (function(){
+	
+	function MaskCEP(){
+		this.inputCep = $('.js-cep');
+	}
+	
+	MaskCEP.prototype.enable = function(){
+		var maskBehavior = function (){
+			return '00000-000';
+		};
+		
+		var options = {
+			onKeyPress: function(val,e,field,options){
+				field.mask(maskBehavior.apply({},arguments),options);
+			}
+		}
+		
+		this.inputCep.mask(maskBehavior,options);
+	}
+	
+	return MaskCEP;
+	
+}());
+
 $(function(){
 	
 	var maskMoney = new Brewer.MaskMoney();
@@ -48,5 +72,8 @@ $(function(){
 	
 	var maskPhoneNumber = new Brewer.MaskPhoneNumber();
 	maskPhoneNumber.enable();
+	
+	var maskCEP = new Brewer.MaskCEP();
+	maskCEP.enable();
 	
 })
