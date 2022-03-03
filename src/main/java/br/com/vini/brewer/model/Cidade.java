@@ -15,6 +15,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "cidade")
 @SequenceGenerator(allocationSize = 1,initialValue = 1, name = "cidade_seq", sequenceName = "cidade_seq")
@@ -29,8 +31,9 @@ public class Cidade implements Serializable{
 	@Size(min = 3,max = 50, message = "Nome deve ter entre 3 e 50 caracteres.")
 	private String nome;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "estado_id")
+	@JsonIgnore
 	private Estado estado;
 
 	public Cidade() { }
