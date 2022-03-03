@@ -26,6 +26,7 @@ Brewer.ComboCidade = (function(){
 		this.comboEstado = comboEstado;
 		this.combo = $('#cidade');
 		this.imgLoading = $('.js-img-loading');
+		this.inputHiddenCidadeSelecionada = $('#idCidadeSelecionada');
 		
 	}
 	
@@ -38,7 +39,7 @@ Brewer.ComboCidade = (function(){
 	
 	function onEstadoAlterado(evento, idEstado){
 		 
-		$('#idCidadeSelecionada').val('');
+		this.inputHiddenCidadeSelecionada.val('');
 		inicializarCidades.call(this,idEstado);
 	}
 	
@@ -70,7 +71,7 @@ Brewer.ComboCidade = (function(){
 		this.combo.html(options.join(''));
 		this.combo.removeAttr('disabled');
 		
-		var idCidadeSelecionada = $('#idCidadeSelecionada').val();
+		var idCidadeSelecionada = this.inputHiddenCidadeSelecionada.val();
 		if(idCidadeSelecionada){
 			this.combo.val(idCidadeSelecionada);
 		}
