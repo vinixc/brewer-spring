@@ -35,6 +35,10 @@ public class ClienteRepositoryImpl extends AbstractRepositoryImpl<Cliente>  impl
 			if(!StringUtils.isEmpty(clienteFilter.getNome())) {
 				criteria.add(Restrictions.ilike("nome",clienteFilter.getNome(), MatchMode.ANYWHERE));
 			}
+			
+			if(!StringUtils.isEmpty(clienteFilter.getCpfOuCnpj())) {
+				criteria.add(Restrictions.eq("cpfOuCnpj", clienteFilter.getCpfOuCnpj()));
+			}
 		}
 	}
 

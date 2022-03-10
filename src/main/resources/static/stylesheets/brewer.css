@@ -123,3 +123,26 @@ COMPONENTES
 .table-estilo-nome{
 	
 }
+
+.table-cliente-col-nome{
+ 
+ }
+
+.table-cliente-col-tipopessoa{
+	width: 120px;
+	text-align: center;
+}
+
+.table-cliente-col-cpfoucnpj{
+	width: 140px;
+	text-align: right;
+}
+
+.table-cliente-col-telefone{
+	width: 140px;
+	text-align: right;
+}
+
+.table-cliente-col-acoes{
+	width: 80px;
+}
