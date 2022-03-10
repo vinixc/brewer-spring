@@ -66,7 +66,7 @@ public class Cliente implements Serializable{
 	
 	@PrePersist @PreUpdate
 	private void preInsertPreUpdate() {
-		this.cpfOuCnpj = this.cpfOuCnpj.replaceAll("\\.|-|/", "");
+		this.cpfOuCnpj = getCpfOuCnpjSemFormatacao();
 	}
 
 	public Cliente() {}
@@ -79,6 +79,10 @@ public class Cliente implements Serializable{
 		this.telefone = telefone;
 		this.email = email;
 		this.endereco = endereco;
+	}
+	
+	public String getCpfOuCnpjSemFormatacao() {
+		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
 
 	public String getNome() {

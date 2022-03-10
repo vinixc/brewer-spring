@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.controller.page.PageWrapper;
+import br.com.vini.brewer.exception.CpfCnpjClienteJaCadastradoException;
 import br.com.vini.brewer.model.Cliente;
 import br.com.vini.brewer.model.TipoPessoa;
 import br.com.vini.brewer.repository.ClienteRepository;
@@ -53,7 +54,12 @@ public class ClienteController {
 			return novo(cliente);
 		}
 		
-		cadastroClienteService.salvar(cliente);
+		try {
+			cadastroClienteService.salvar(cliente);
+		}catch (CpfCnpjClienteJaCadastradoException e) {
+			result.rejectValue("cpfOuCnpj", e.getMessage(), e.getMessage());
+			return novo(cliente);
+		}
 		
 		attributes.addFlashAttribute("mensagem","Cliente salvo com sucesso!");
 		
