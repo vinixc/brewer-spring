@@ -150,3 +150,13 @@ COMPONENTES
 .table-cliente-col-cidade-estado{
 	text-align: left;
 }
+
+.table-cidade-col-nome{
+	text-align: left;
+	width: 80% !important;
+}
+
+.table-cliente-col-estado{
+	text-align: left;
+	width: 20% !important;
+}
