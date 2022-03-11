@@ -66,6 +66,7 @@
 								</th>
 								<th class="table-cliente-col-cpfoucnpj">CPF/CNPJ</th>
 								<th class="table-cliente-col-telefone">Telefone</th>
+								<th class="table-cliente-col-cidade-estado">Cidade/Estado</th>
 								<th class="table-cliente-col-acoes"></th>
 							</tr>
 						</thead>
@@ -75,8 +76,10 @@
 							<tr th:each="cliente : ${pagina.content}">
 								<td class="text-left" th:text="${cliente.nome}">Nome cliente</td>
 								<td class="text-center" th:text="${cliente.tipoPessoa.descricao}">tipo pessoa</td>
-								<td class="text-center" th:text="${cliente.cpfOuCnpj}">CPF/CNPJ</td>
-								<td class="text-center" th:text="${cliente.telefone}">Telefone</td>
+								<td class="text-right" th:text="${cliente.cpfOuCnpj}">CPF/CNPJ</td>
+								<td class="text-right" th:text="${cliente.telefone}">Telefone</td>
+								<td class="text-left" th:text="${cliente.endereco.nomeCidadeEstado}">cidade/nome</td>
+								
 								<td class="text-center">
 									<a class="btn btn-link btn-xs js-tooltip" title="Editar">
 										<i class="glyphicon glyphicon-pencil"></i>

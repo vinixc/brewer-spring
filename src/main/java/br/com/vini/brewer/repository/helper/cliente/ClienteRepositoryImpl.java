@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,9 @@ public class ClienteRepositoryImpl extends AbstractRepositoryImpl<Cliente>  impl
 
 	@Override
 	protected void adicionaRestricoes(Filter filter, Criteria criteria) {
+		criteria.createAlias("endereco.cidade", "c", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("c.estado", "e", JoinType.LEFT_OUTER_JOIN);
+		
 		if(filter != null) {
 			ClienteFilter clienteFilter = (ClienteFilter) filter;
 			

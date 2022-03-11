@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
@@ -67,6 +68,11 @@ public class Cliente implements Serializable{
 	@PrePersist @PreUpdate
 	private void preInsertPreUpdate() {
 		this.cpfOuCnpj = getCpfOuCnpjSemFormatacao();
+	}
+	
+	@PostLoad
+	private void postLoad() {
+		this.cpfOuCnpj = this.tipoPessoa.formatar(this.cpfOuCnpj);
 	}
 
 	public Cliente() {}

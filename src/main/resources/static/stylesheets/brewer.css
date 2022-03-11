@@ -146,3 +146,7 @@ COMPONENTES
 .table-cliente-col-acoes{
 	width: 80px;
 }
+
+.table-cliente-col-cidade-estado{
+	text-align: left;
+}
