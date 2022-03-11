@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/layoutPadrao">
+	layout:decorate="layout/layoutPadrao"
+	xmlns:brewer="http://brewer.com">
 	
 <head>
 	<title>Cadastro de Cidade</title>
@@ -23,19 +24,23 @@
 
 <div class="container-fluid">
 
-<form method="POST" th:object="${usuario}" class="form-vertical  js-form-loading">
+<form method="POST" th:object="${cidade}" th:action="@{/cidade/nova}" class="form-vertical  js-form-loading">
+
+	<brewer:message/>
 
 			<div class="row">
-				<div class="col-sm-4 form-group">
-					<label for="estado">Estado</label>
-					<select id="estado" class="form-control">
+				<div class="col-sm-4 form-group bw-required" brewer:classforerror="estado">
+					<label for="estado" class="control-label">Estado</label>
+					<select id="estado" class="form-control" th:field="*{estado}">
 							<option value="">Selecione o estado</option>
+							
+							<option th:each="estado : ${estados}" th:value="${estado.id}" th:text="${estado.nome}">Sao Paulo</option>
 					</select>
 				</div>
 				
-				<div class="col-sm-8 form-group">
-					<label for="nome">Nome</label>
-					<input type="text" id="nome" class="form-control">
+				<div class="col-sm-8 form-group bw-required" brewer:classforerror="nome">
+					<label for="nome" class="control-label">Nome</label>
+					<input type="text" id="nome" class="form-control" th:field="*{nome}">
 				</div>
 			</div>
 			

@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -31,6 +32,7 @@ public class Cidade implements Serializable{
 	@Size(min = 3,max = 50, message = "Nome deve ter entre 3 e 50 caracteres.")
 	private String nome;
 	
+	@NotNull(message = "Estado é obrigatorio")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "estado_id")
 	@JsonIgnore
