@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.exception.EmailJaCadastradoException;
 import br.com.vini.brewer.model.Usuario;
+import br.com.vini.brewer.repository.GrupoRepository;
 import br.com.vini.brewer.service.CadastroUsuarioService;
 
 @Controller
@@ -22,9 +23,13 @@ public class UsuarioController {
 	@Autowired
 	private CadastroUsuarioService cadastroUsuarioService;
 	
+	@Autowired
+	private GrupoRepository grupoRepository;
+	
 	@RequestMapping("/novo")
 	public ModelAndView novo(Usuario usuario) {
 		ModelAndView mv = new ModelAndView("usuario/cadastroUsuario");
+		mv.addObject("grupos", grupoRepository.findAll());
 		
 		return mv;
 	}

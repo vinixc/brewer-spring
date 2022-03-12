@@ -16,6 +16,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -51,7 +53,8 @@ public class Usuario implements Serializable{
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
-//	@NotNull(message = "Selecione pelo menos um grupo")
+	@NotNull(message = "Selecione pelo menos um grupo")
+	@Size(min = 1, message = "Informe ao menos 1 grupo")
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", 
 	joinColumns = @JoinColumn(name="usuario_id"), 
