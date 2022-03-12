@@ -25,5 +25,6 @@ public @interface AtributoConfirmacao {
 	
 	String atributo();
 	String atributoConfirmacao();
+	String atributoParaValidarAlteracao();
 
 }

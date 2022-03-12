@@ -12,10 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -26,7 +26,7 @@ import br.com.vini.brewer.validation.AtributoConfirmacao;
 @Table(name = "usuario")
 @SequenceGenerator(allocationSize = 1,initialValue = 1,name = "usuario_seq", sequenceName = "usuario_seq")
 
-@AtributoConfirmacao(atributo = "senha", atributoConfirmacao = "confirmacaoSenha", message = "Confirmação da senha não conferem")
+@AtributoConfirmacao(atributo = "senha", atributoConfirmacao = "confirmacaoSenha", message = "Confirmação da senha não conferem", atributoParaValidarAlteracao = "id")
 public class Usuario implements Serializable{
 	private static final long serialVersionUID = -5190619349609726115L;
 	
@@ -51,12 +51,17 @@ public class Usuario implements Serializable{
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
-	@NotNull(message = "Selecione pelo menos um grupo")
+//	@NotNull(message = "Selecione pelo menos um grupo")
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", 
 	joinColumns = @JoinColumn(name="usuario_id"), 
 	inverseJoinColumns = @JoinColumn(name = "grupo_id"))
 	private List<Grupo> grupos;
+	
+	@PrePersist
+	private void onPersist() {
+		if(this.ativo == null) this.ativo = false;
+	}
 
 	public String getNome() {
 		return nome;
