@@ -50,13 +50,13 @@
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-3 form-group bw-required">
+				<div class="col-sm-3 form-group" brewer:classforerror="senha">
 					<label class="control-label" for="senha">Senha</label>
-					<input id="senha" type="text" class="form-control"/>
+					<input id="senha" type="password" class="form-control" th:field="*{senha}"/>
 				</div>
-				<div class="col-sm-3 form-group bw-required">
+				<div class="col-sm-3 form-group" brewer:classforerror="confirmacaoSenha">
 					<label class="control-label" for="confirmSenha">Confirmação de senha</label>
-					<input id="confirmSenha" type="text" class="form-control"/>
+					<input id="confirmSenha" type="password" class="form-control" th:field="*{confirmacaoSenha}"/>
 				</div>
 				
 				<div class="col-sm-6 form-group">
