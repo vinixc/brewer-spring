@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.model.Usuario;
@@ -16,15 +17,20 @@ import br.com.vini.brewer.model.Usuario;
 public class UsuarioController {
 	
 	@RequestMapping("/novo")
-	public String novo(Usuario usuario) {
-		return "usuario/cadastroUsuario";
+	public ModelAndView novo(Usuario usuario) {
+		ModelAndView mv = new ModelAndView("usuario/cadastroUsuario");
+		
+		return mv;
 	}
 	
 	@RequestMapping(value = "/novo", method = RequestMethod.POST)
-	public String cadastrar(@Valid Usuario usuario, BindingResult result, Model model, RedirectAttributes attributes) {
+	public ModelAndView cadastrar(@Valid Usuario usuario, BindingResult result, Model model, RedirectAttributes attributes) {
 		
+		if(result.hasErrors()) {
+			return novo(usuario);
+		}
 		attributes.addFlashAttribute("mensagem","Usuario salvo com sucesso!");
 		
-		return "redirect:/usuario/novo";
+		return new ModelAndView("redirect:/usuario/novo");
 	}
 }

@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/layoutPadrao">
+	layout:decorate="layout/layoutPadrao"
+	xmlns:brewer="http://brewer.com">
 	
 <head>
 	<title>Cadastro de usuário</title>
@@ -25,19 +26,21 @@
 
 <div class="container-fluid">
 
-<form method="POST" th:object="${usuario}" class="form-vertical  js-form-loading">
+	<form method="POST" th:object="${usuario}" th:action="@{/usuario/novo}" class="form-vertical  js-form-loading">
+		
+		<brewer:message/>
 
 			<div class="row">
-				<div class="col-sm-12 form-group">
-					<label for="nome">Nome</label>
-					<input id="nome" type="text" class="form-control"/>
+				<div class="col-sm-12 form-group bw-required" brewer:classforerror="nome">
+					<label class="control-label" for="nome">Nome</label>
+					<input id="nome" type="text" class="form-control" th:field="*{nome}"/>
 				</div>
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-6 form-group">
-					<label for="email">E-mail</label>
-					<input id="email" type="text" class="form-control"/>
+				<div class="col-sm-6 form-group bw-required" brewer:classforerror="email">
+					<label class="control-label" for="email">E-mail</label>
+					<input id="email" type="text" class="form-control" th:field="*{email}"/>
 				</div>
 				
 				<div class="col-sm-6 form-group">
@@ -47,12 +50,12 @@
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-3 form-group">
-					<label for="senha">Senha</label>
+				<div class="col-sm-3 form-group bw-required">
+					<label class="control-label" for="senha">Senha</label>
 					<input id="senha" type="text" class="form-control"/>
 				</div>
-				<div class="col-sm-3 form-group">
-					<label for="confirmSenha">Confirmação de senha</label>
+				<div class="col-sm-3 form-group bw-required">
+					<label class="control-label" for="confirmSenha">Confirmação de senha</label>
 					<input id="confirmSenha" type="text" class="form-control"/>
 				</div>
 				
@@ -67,7 +70,7 @@
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-6 form-group">
+				<div class="col-sm-6 form-group bw-required" brewer:classforerror="grupos">
 					<label class="control-label">Grupos</label>
 					<div>
 						<div class="checkbox checkbox-inline">

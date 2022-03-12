@@ -40,7 +40,6 @@ public class Usuario implements Serializable{
 	
 	private Boolean ativo;
 	
-	@NotNull(message = "Data de nascimento é obrigatorio")
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	
