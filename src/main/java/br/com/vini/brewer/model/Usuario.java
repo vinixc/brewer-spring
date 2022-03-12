@@ -21,6 +21,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.vini.brewer.validation.AtributoConfirmacao;
 
@@ -64,6 +65,15 @@ public class Usuario implements Serializable{
 	@PrePersist
 	private void onPersist() {
 		if(this.ativo == null) this.ativo = false;
+	}
+	
+	public Boolean isNovo() {
+		return this.id == null;
+	}
+	
+	public void criptografaPassword(PasswordEncoder passwordEncoder) {
+		this.senha = passwordEncoder.encode(this.senha);
+		this.confirmacaoSenha = senha;
 	}
 
 	public String getNome() {

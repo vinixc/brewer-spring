@@ -52,11 +52,11 @@
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-3 form-group" brewer:classforerror="senha">
+				<div class="col-sm-3 form-group" brewer:classforerror="senha" th:classappend="${usuario.novo} ? bw-required">
 					<label class="control-label" for="senha">Senha</label>
 					<input id="senha" type="password" class="form-control" th:field="*{senha}"/>
 				</div>
-				<div class="col-sm-3 form-group" brewer:classforerror="confirmacaoSenha">
+				<div class="col-sm-3 form-group" brewer:classforerror="confirmacaoSenha" th:classappend="${usuario.novo} ? bw-required">
 					<label class="control-label" for="confirmSenha">Confirmação de senha</label>
 					<input id="confirmSenha" type="password" class="form-control" th:field="*{confirmacaoSenha}"/>
 				</div>
