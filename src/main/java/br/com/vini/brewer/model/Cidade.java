@@ -44,6 +44,10 @@ public class Cidade implements Serializable{
 		this.nome = nome;
 		this.estado = estado;
 	}
+	
+	public Boolean temEstado() {
+		return this.estado != null;
+	}
 
 	public String getNome() {
 		return nome;
