@@ -1,5 +1,6 @@
 package br.com.vini.brewer.repository.helper.usuario;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -53,5 +54,12 @@ public class UsuarioRepositoryImpl extends AbstractRepositoryImpl<Usuario> imple
 		return manager.createQuery("SELECT u FROM Usuario u where lower(u.email) = lower(:email) and u.ativo = true", Usuario.class)
 				.setParameter("email", email)
 				.getResultList().stream().findFirst();
+	}
+
+	@Override
+	public List<String> permissoes(Usuario usuario) {
+		return manager.createQuery("SELECT DISTINCT p.nome FROM Usuario u INNER JOIN u.grupos g INNER JOIN g.permissoes p WHERE u = :usuario", String.class)
+					.setParameter("usuario", usuario)
+					.getResultList();
 	}
 }
