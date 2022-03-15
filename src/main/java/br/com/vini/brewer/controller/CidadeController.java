@@ -52,6 +52,7 @@ public class CidadeController {
 		return mv;
 	}
 	
+//	@Secured("ROLE_CADASTRAR_CIDADE")
 	@RequestMapping(value = "/nova", method = RequestMethod.POST)
 	@CacheEvict(value = "cidades", key="#cidade.estado.id", condition = "#cidade.temEstado()")
 	public ModelAndView cadastrar(@Valid Cidade cidade, BindingResult result, Model model, RedirectAttributes attributes) {
