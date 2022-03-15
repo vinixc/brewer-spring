@@ -53,8 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.accessDeniedPage("/403")
 				.and()
 			.sessionManagement()
-				.maximumSessions(1)
-				.expiredUrl("/login");
+				.maximumSessions(1) //define o numero maximo de sessoes para 1 usuario, ou seja, nao sera possivel logar em 2 computadores ao mesmo tempo.
+				.expiredUrl("/login")
+				.and()
+				.invalidSessionUrl("/login");
 	}
 	
 	@Bean
