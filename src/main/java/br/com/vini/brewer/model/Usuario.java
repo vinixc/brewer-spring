@@ -13,12 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +32,7 @@ import br.com.vini.brewer.validation.AtributoConfirmacao;
 @SequenceGenerator(allocationSize = 1,initialValue = 1,name = "usuario_seq", sequenceName = "usuario_seq")
 
 @AtributoConfirmacao(atributo = "senha", atributoConfirmacao = "confirmacaoSenha", message = "Confirmação da senha não conferem", atributoParaValidarAlteracao = "id")
+@DynamicUpdate
 public class Usuario implements Serializable{
 	private static final long serialVersionUID = -5190619349609726115L;
 	
@@ -65,6 +68,11 @@ public class Usuario implements Serializable{
 	@PrePersist
 	private void onPersist() {
 		if(this.ativo == null) this.ativo = false;
+	}
+	
+	@PreUpdate
+	private void preUpdate() {
+		this.confirmacaoSenha = senha;
 	}
 	
 	public Boolean isNovo() {

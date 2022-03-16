@@ -73,10 +73,26 @@
 				</form>
 				
 				
+				<div class="aw-datatable-toolbar">
+					<button class="btn btn-default btn-xs js-status-btn" data:status="ATIVAR">
+						<span>Ativar</span>
+					</button>
+					
+					<button class="btn btn-default btn-xs js-status-btn" data:status="DESATIVAR">
+						<span>Desativar</span>
+					</button>
+				</div>
+				
 				<div class="table-responsive bw-table-simple">
 					<table class="table table-hover">
 						<thead>
 							<tr>
+								<th class="table-usuario-col-status">
+									<div class="checkbox aw-checkbox-no-margin">
+										<input type="checkbox"/>
+										<label></label>
+									</div>
+								</th>
 								<th class="table-usuarios-col-nome">Nome</th>
 								<th class="table-usuarios-col-email">E-mail</th>
 								<th class="table-usuarios-col-grupo">Grupo</th>
@@ -87,6 +103,12 @@
 						
 						<tbody>
 							<tr th:each="usuario : ${pagina.content}">
+								<td>
+									<div class="checkbox aw-checkbox-no-margin">
+										<input type="checkbox" class="js-selecao" data:codigo="${usuario.id}"/>
+										<label></label>
+									</div>
+								</td>
 								<td class="text-left" th:text="${usuario.nome}">Vinicius de Carvalho</td>
 								<td th:text="${usuario.email}">email@gmail.com</td>
 								<td>
@@ -116,6 +138,10 @@
 			
 		
 		</section>
+		
+		<th:block layout:fragment="javascript-extra">
+			<script th:src="@{/javascripts/multiselecao.js}"></script>		
+		</th:block>
 	
 	</body>
 	
