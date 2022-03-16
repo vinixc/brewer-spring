@@ -70,7 +70,7 @@ public class UsuarioController {
 	
 	@GetMapping
 	public ModelAndView pesquisar(UsuarioFilter usuarioFilter, BindingResult bindingResult,
-			@PageableDefault(size = 2) Pageable pageable, HttpServletRequest request) {
+			@PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("usuario/pesquisaUsuario");
 		
 		mv.addObject("grupos", grupoRepository.findAll());

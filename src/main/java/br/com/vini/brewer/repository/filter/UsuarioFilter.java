@@ -1,6 +1,9 @@
 package br.com.vini.brewer.repository.filter;
 
 import java.io.Serializable;
+import java.util.List;
+
+import br.com.vini.brewer.model.Grupo;
 
 public class UsuarioFilter implements Serializable,Filter{
 	private static final long serialVersionUID = -7864254933115494504L;
@@ -8,6 +11,7 @@ public class UsuarioFilter implements Serializable,Filter{
 	private String nome;
 	private String email;
 	private Boolean ativo;
+	private List<Grupo> grupos;
 	
 	public String getEmail() {
 		return email;
@@ -27,6 +31,10 @@ public class UsuarioFilter implements Serializable,Filter{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
-
+	public List<Grupo> getGrupos() {
+		return grupos;
+	}
+	public void setGrupos(List<Grupo> grupos) {
+		this.grupos = grupos;
+	}
 }
