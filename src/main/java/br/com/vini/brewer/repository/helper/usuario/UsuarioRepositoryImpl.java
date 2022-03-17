@@ -8,14 +8,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
-import org.hibernate.sql.JoinType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -36,13 +37,26 @@ public class UsuarioRepositoryImpl extends AbstractRepositoryImpl<Usuario> imple
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Usuario> filtrar(UsuarioFilter usuarioFilter, Pageable pageable) {
-		return super.filtrar(usuarioFilter, pageable);
+		initCriterias();
+		adicionarRestricoesDePaginacao(pageable);
+		adicionaOrdenacao(pageable);
+		
+		if(usuarioFilter != null) {
+			adicionaRestricoes(usuarioFilter,criteria);
+		}
+		
+		Long total = total(usuarioFilter);
+		
+		//Inicializando grupos manualmente para evitar problema com a paginacao
+		@SuppressWarnings("unchecked")
+		List<Usuario> filtrados = criteria.list();
+		filtrados.forEach(u -> Hibernate.initialize(u.getGrupos()));
+		
+		return new PageImpl<Usuario>(filtrados, pageable, total);
 	}
 	
 	@Override
 	protected void adicionaRestricoes(Filter filter, Criteria criteria) {
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
 		UsuarioFilter usuarioFilter = (UsuarioFilter) filter;
 		
 		if(StringUtils.hasText(usuarioFilter.getNome())) {
@@ -57,7 +71,7 @@ public class UsuarioRepositoryImpl extends AbstractRepositoryImpl<Usuario> imple
 			criteria.add(Restrictions.eq("ativo", usuarioFilter.getAtivo()));
 		}
 		
-		criteria.createAlias("grupos", "g", JoinType.LEFT_OUTER_JOIN);
+//		criteria.createAlias("grupos", "g", JoinType.LEFT_OUTER_JOIN);
 		if(usuarioFilter.getGrupos() != null && !usuarioFilter.getGrupos().isEmpty()) {
 			
 			List<Criterion> subqueries = new ArrayList<>();

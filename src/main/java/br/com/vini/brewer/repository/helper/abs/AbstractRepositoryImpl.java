@@ -37,7 +37,7 @@ public abstract class AbstractRepositoryImpl<T>{
 		return new PageImpl<T>(criteria.list(), pageable, total);
 	}
 	
-	private Long total(Filter filter) {
+	protected Long total(Filter filter) {
 		if(filter != null) {
 			adicionaRestricoes(filter,criteriaCount);
 		}
@@ -47,7 +47,7 @@ public abstract class AbstractRepositoryImpl<T>{
 		return (Long) criteriaCount.uniqueResult();
 	}
 
-	private void adicionarRestricoesDePaginacao(Pageable pageable) {
+	protected void adicionarRestricoesDePaginacao(Pageable pageable) {
 		int totalRegistersForpage = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
 		int firstRegister = currentPage * totalRegistersForpage;
@@ -56,7 +56,7 @@ public abstract class AbstractRepositoryImpl<T>{
 		criteria.setMaxResults(totalRegistersForpage);
 	}
 	
-	private void adicionaOrdenacao(Pageable pageable) {
+	protected void adicionaOrdenacao(Pageable pageable) {
 		Sort sort = pageable.getSort();
 		if(sort != null) {
 			Sort.Order order = sort.iterator().next();
@@ -64,7 +64,7 @@ public abstract class AbstractRepositoryImpl<T>{
 			criteria.addOrder(order.isAscending() ? Order.asc(field) : Order.desc(field));
 		}
 	}
-	private void initCriterias() {
+	protected void initCriterias() {
 		ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
 		Type type = genericSuperclass.getActualTypeArguments()[0];
 

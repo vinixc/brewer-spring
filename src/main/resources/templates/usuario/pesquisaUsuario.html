@@ -93,10 +93,16 @@
 										<label></label>
 									</div>
 								</th>
-								<th class="table-usuarios-col-nome">Nome</th>
-								<th class="table-usuarios-col-email">E-mail</th>
+								<th class="table-usuarios-col-nome">
+									<brewer:order page="${pagina}" field="nome" text="Nome"/>
+								</th>
+								<th class="table-usuarios-col-email">
+									<brewer:order page="${pagina}" field="email" text="E-mail"/>
+								</th>
 								<th class="table-usuarios-col-grupo">Grupo</th>
-								<th class="table-usuarios-col-status">Status</th>
+								<th class="table-usuarios-col-status">
+									<brewer:order page="${pagina}" field="ativo" text="Status"/>
+								</th>
 								<th class="table-usuarios-col-acoes"></th>
 							</tr>
 						</thead>
@@ -134,7 +140,7 @@
 							</tr>
 							
 							<tr th:if="${#lists.isEmpty(pagina.content)}">
-								<td colspan="7">Nenhum usuario encontrado.</td>					
+								<td colspan="6">Nenhum usuario encontrado.</td>					
 							</tr>
 						</tbody>
 					</table>
