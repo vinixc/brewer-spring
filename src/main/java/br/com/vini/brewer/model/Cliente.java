@@ -24,6 +24,8 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 import org.hibernate.validator.group.GroupSequenceProvider;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.vini.brewer.model.validation.ClienteGroupSequenceProvider;
 import br.com.vini.brewer.model.validation.group.CnpjGroup;
 import br.com.vini.brewer.model.validation.group.CpfGroup;
@@ -62,7 +64,7 @@ public class Cliente implements Serializable{
 	@Size(max = 50, message = "email deve ter no máximo 50 caracteres")
 	private String email;
 	
-	@Embedded
+	@Embedded @JsonIgnore
 	private Endereco endereco;
 	
 	@PrePersist @PreUpdate
