@@ -16,7 +16,12 @@ Brewer.PesquisaRapidaCliente = (function(){
 	PesquisaRapidaCliente.prototype.iniciar = function(){
 		
 		this.pesquisaRapidaBtn.on('click', onPesquisaRapidaClicado.bind(this));
+		this.pesquisaRapidaClientesModal.on('shown.bs.modal',onModalShow.bind(this));
 		
+	}
+	
+	function onModalShow(){
+		this.nomeInput.focus();
 	}
 	
 	function onPesquisaRapidaClicado(event){
@@ -35,9 +40,14 @@ Brewer.PesquisaRapidaCliente = (function(){
 	}
 	
 	function onPesquisaConcluida(resultado){
+		this.mensagemErro.addClass('hidden');
+
 		var html = this.template(resultado);
 		this.containerTabelaPesquisa.html(html);
-		this.mensagemErro.addClass('hidden');
+		
+		var tabelaClientePesquisaRapida = new Brewer.TabelaClientePesquisaRapida(this.pesquisaRapidaClientesModal);
+		tabelaClientePesquisaRapida.iniciar();
+		
 	}
 	
 	function onErroPesquisa(){
@@ -48,6 +58,31 @@ Brewer.PesquisaRapidaCliente = (function(){
 	
 }());
 
+
+Brewer.TabelaClientePesquisaRapida = (function(){
+	
+	function TabelaClientePesquisaRapida(modal) {
+		this.cliente = $('.js-cliente-da-pesquisa-rapida');
+		this.modalCliente = modal;
+	}
+	
+	TabelaClientePesquisaRapida.prototype.iniciar = function(){
+		this.cliente.on('click', onClienteSelecionado.bind(this));
+	}
+	
+	function onClienteSelecionado(evento){
+		this.modalCliente.modal('hide');
+
+		var clienteSelecionado = $(evento.currentTarget);
+		
+		$('#nomeCliente').val(clienteSelecionado.data('nome'));
+		$('#codigoCliente').val(clienteSelecionado.data('codigo'));
+		
+	}
+	
+	return TabelaClientePesquisaRapida;
+	
+}());
 $(function(){
 	var pesquisaRapidoCliente = new Brewer.PesquisaRapidaCliente();
 	pesquisaRapidoCliente.iniciar();
