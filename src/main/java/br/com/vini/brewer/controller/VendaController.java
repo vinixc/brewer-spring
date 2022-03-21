@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.repository.CervejaRepository;
@@ -27,12 +27,14 @@ public class VendaController {
 	}
 	
 	@PostMapping("/item")
-	public @ResponseBody String adicionarItem(Long idCerveja) {
+	public ModelAndView adicionarItem(Long idCerveja) {
 		Cerveja cerveja = cervejaRepository.findOne(idCerveja);
 		tabelaItensVenda.adicionarItem(cerveja, 1);
 		
-		System.out.println(">>> Total de itens:" + tabelaItensVenda.getTotal());
-		return "Item adicionado";
+		ModelAndView mv = new ModelAndView("venda/tabelaItensVenda");
+		mv.addObject("itens", tabelaItensVenda.getItens());
+		
+		return mv;
 	}
 
 }
