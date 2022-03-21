@@ -3,6 +3,8 @@ package br.com.vini.brewer.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import org.springframework.util.StringUtils;
+
 import br.com.vini.brewer.model.Origem;
 
 public class CervejaDTO implements Serializable{
@@ -21,7 +23,7 @@ public class CervejaDTO implements Serializable{
 		this.nome = nome;
 		this.origem = origem.getDescricao();
 		this.valor = valor;
-		this.foto = foto;
+		this.foto = StringUtils.isEmpty(foto) ? "cerveja-mock.png" : foto;
 	}
 
 	public Long getId() {
