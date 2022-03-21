@@ -1,4 +1,4 @@
-package br.com.vini.brewer.venda;
+package br.com.vini.brewer.session;
 
 import static org.junit.Assert.*;
 

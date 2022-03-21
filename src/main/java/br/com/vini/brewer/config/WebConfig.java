@@ -43,11 +43,12 @@ import br.com.vini.brewer.controller.converter.CidadeConverter;
 import br.com.vini.brewer.controller.converter.EstadoConverter;
 import br.com.vini.brewer.controller.converter.EstiloConverter;
 import br.com.vini.brewer.controller.converter.GrupoConverter;
+import br.com.vini.brewer.session.TabelaItensVenda;
 import br.com.vini.brewer.thymeleaf.BrewerDialect;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
-@ComponentScan(basePackageClasses = {CervejaController.class})
+@ComponentScan(basePackageClasses = {CervejaController.class, TabelaItensVenda.class})
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @EnableCaching
