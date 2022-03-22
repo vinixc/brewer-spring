@@ -28,6 +28,7 @@ public class VendaController {
 	
 	@PostMapping("/item")
 	public ModelAndView adicionarItem(Long idCerveja) {
+		
 		Cerveja cerveja = cervejaRepository.findOne(idCerveja);
 		tabelaItensVenda.adicionarItem(cerveja, 1);
 		
