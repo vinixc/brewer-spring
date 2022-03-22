@@ -3,19 +3,20 @@ package br.com.vini.brewer.session;
 import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.vini.brewer.model.Cerveja;
 
-public class TabelaItensVendaTest {
+ public class TabelaItensVendaTest {
 	
 	private TabelaItensVenda tabelaItensVenda;
 	
 	@Before
 	public void setUp() {
-		this.tabelaItensVenda = new TabelaItensVenda();
+		this.tabelaItensVenda = new TabelaItensVenda(UUID.randomUUID().toString());
 	}
 	
 	@Test

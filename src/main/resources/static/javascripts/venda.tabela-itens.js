@@ -3,6 +3,7 @@ Brewer.TabelaItens = (function(){
 	function TabelaItens(autocomplete){
 		this.autocomplete = autocomplete;
 		this.tabelaCervejasContainer = $('.js-tabela-cervejas-container');
+		this.uuid = $('#uuid').val();
 	}
 	
 	TabelaItens.prototype.iniciar = function(){
@@ -14,7 +15,8 @@ Brewer.TabelaItens = (function(){
 			url:'item',
 			method: 'POST',
 			data:{
-				idCerveja: item.id
+				idCerveja: item.id,
+				uuid : this.uuid
 			}
 		});
 		
@@ -37,7 +39,8 @@ Brewer.TabelaItens = (function(){
 			url: 'item/' + codigoCerveja,
 			method: 'PUT',
 			data:{
-				quantidade:quantidade
+				quantidade:quantidade,
+				uuid : this.uuid
 			}
 		});
 		
@@ -53,7 +56,7 @@ Brewer.TabelaItens = (function(){
 	function onExclusaoItemClick(evento){
 		var idCerveja = $(evento.target).data('codigo-cerveja');
 		var resposta = $.ajax({
-			url: 'item/' + idCerveja,
+			url: 'item/' + this.uuid + '/' + idCerveja,
 			method: 'DELETE'
 		})
 		
