@@ -33,7 +33,7 @@ public class ItemVenda implements Serializable{
 	private Cerveja cerveja;
 	
 	@ManyToOne
-	@JoinColumn(name = "codigo_venda")
+	@JoinColumn(name = "id_venda")
 	private Venda venda;
 	
 	public Long getId() {
