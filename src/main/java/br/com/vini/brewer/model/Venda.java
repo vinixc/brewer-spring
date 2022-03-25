@@ -25,6 +25,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.util.ObjectUtils;
+
 @Entity
 @Table(name = "venda")
 @SequenceGenerator(name = "venda_seq", sequenceName = "venda_seq", allocationSize = 1, initialValue = 1)
@@ -78,7 +80,9 @@ public class Venda implements Serializable{
 	@PrePersist
 	public void onPersist() {
 		this.dataCriacao = LocalDateTime.now();
-		this.status = StatusVenda.ORCAMENTO;
+		
+		if(ObjectUtils.isEmpty(this.status))
+			this.status = StatusVenda.ORCAMENTO;
 	}
 	
 	public void calcularValorTotal() {

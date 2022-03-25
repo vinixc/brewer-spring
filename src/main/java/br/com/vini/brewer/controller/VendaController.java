@@ -62,13 +62,10 @@ public class VendaController {
 		return mv;
 	}
 	
-	@PostMapping("/nova")
+	@PostMapping(value = "/nova", params = "salvar")
 	public ModelAndView salvar(Venda venda, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
 		
-		venda.adicionarItens(tabelaItens.getItens(venda.getUuid()));
-		venda.calcularValorTotal();
-
-		vendaValidator.validate(venda, result);
+		validarVenda(venda, result);
 		if(result.hasErrors()) {
 			return nova(venda);
 		}
@@ -78,6 +75,40 @@ public class VendaController {
 		this.cadastroVendaService.salvar(venda);
 		
 		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso!");
+		
+		return new ModelAndView("redirect:/venda/nova");
+	}
+
+	@PostMapping(value = "/nova", params = "emitir")
+	public ModelAndView emitir(Venda venda, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+		
+		validarVenda(venda, result);
+		if(result.hasErrors()) {
+			return nova(venda);
+		}
+		
+		venda.setUsuario(usuarioSistema.getUsuario());
+		
+		this.cadastroVendaService.emitir(venda);
+		
+		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso!");
+		
+		return new ModelAndView("redirect:/venda/nova");
+	}
+	
+	@PostMapping(value = "/nova", params = "enviarEmail")
+	public ModelAndView enviarEmail(Venda venda, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+		
+		validarVenda(venda, result);
+		if(result.hasErrors()) {
+			return nova(venda);
+		}
+		
+		venda.setUsuario(usuarioSistema.getUsuario());
+		
+		this.cadastroVendaService.salvar(venda);
+		
+		attributes.addFlashAttribute("mensagem", "Venda salva e e-mail enviado!");
 		
 		return new ModelAndView("redirect:/venda/nova");
 	}
@@ -108,6 +139,13 @@ public class VendaController {
 		mv.addObject("uuid", uuid);
 		mv.addObject("valorTotal",tabelaItens.getValorTotal(uuid));
 		return mv;
+	}
+	
+	private void validarVenda(Venda venda, BindingResult result) {
+		venda.adicionarItens(tabelaItens.getItens(venda.getUuid()));
+		venda.calcularValorTotal();
+
+		vendaValidator.validate(venda, result);
 	}
 
 }
