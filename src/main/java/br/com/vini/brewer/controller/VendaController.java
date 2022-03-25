@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.controller.validator.VendaValidator;
+import br.com.vini.brewer.mail.Mailer;
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
@@ -53,6 +54,9 @@ public class VendaController {
 	
 	@Autowired
 	private VendaValidator vendaValidator;
+	
+	@Autowired
+	private Mailer mailer;
 	
 	@InitBinder("venda")
 	public void inicializarValidador(WebDataBinder binder) {
@@ -119,6 +123,7 @@ public class VendaController {
 		venda.setUsuario(usuarioSistema.getUsuario());
 		
 		this.cadastroVendaService.salvar(venda);
+		mailer.enviar();
 		
 		attributes.addFlashAttribute("mensagem", "Venda salva e e-mail enviado!");
 		
