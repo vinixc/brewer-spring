@@ -123,7 +123,7 @@ public class VendaController {
 		venda.setUsuario(usuarioSistema.getUsuario());
 		
 		this.cadastroVendaService.salvar(venda);
-		mailer.enviar();
+		mailer.enviar(venda);
 		
 		attributes.addFlashAttribute("mensagem", "Venda salva e e-mail enviado!");
 		
