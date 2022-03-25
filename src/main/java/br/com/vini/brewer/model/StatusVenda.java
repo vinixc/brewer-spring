@@ -2,7 +2,17 @@ package br.com.vini.brewer.model;
 
 public enum StatusVenda {
 
-	ORCAMENTO,
-	EMITIDA,
-	CANCELADA;
+	ORCAMENTO("Orçamento"),
+	EMITIDA("Emitida"),
+	CANCELADA("Cancelada");
+	
+	private String descricao;
+	
+	StatusVenda(String msg) {
+		descricao = msg;
+	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
 }

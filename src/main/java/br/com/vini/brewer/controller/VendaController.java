@@ -2,7 +2,12 @@ package br.com.vini.brewer.controller;
 
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -18,10 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.controller.validator.VendaValidator;
 import br.com.vini.brewer.model.Cerveja;
+import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
 import br.com.vini.brewer.repository.CervejaRepository;
+import br.com.vini.brewer.repository.VendaRepository;
+import br.com.vini.brewer.repository.filter.VendaFilter;
 import br.com.vini.brewer.security.UsuarioSistema;
 import br.com.vini.brewer.service.CadastroVendaService;
 import br.com.vini.brewer.session.TabelasItensSession;
@@ -34,6 +43,9 @@ public class VendaController {
 	private CervejaRepository cervejaRepository;
 	
 	@Autowired
+	private VendaRepository vendaRepository;
+	
+	@Autowired
 	private TabelasItensSession tabelaItens;
 	
 	@Autowired
@@ -42,7 +54,7 @@ public class VendaController {
 	@Autowired
 	private VendaValidator vendaValidator;
 	
-	@InitBinder
+	@InitBinder("venda")
 	public void inicializarValidador(WebDataBinder binder) {
 		binder.setValidator(vendaValidator);
 	}
@@ -131,6 +143,22 @@ public class VendaController {
 	public ModelAndView excluirItem(@PathVariable("idCerveja") Cerveja cerveja, @PathVariable String uuid) {
 		tabelaItens.excluirItem(uuid,cerveja);
 		return mvTabelaItensVenda(uuid);
+	}
+	
+	@GetMapping
+	public ModelAndView pesquisar(VendaFilter vendaFilter, 
+			@PageableDefault(size = 10) Pageable pageable, HttpServletRequest request) {
+		
+		ModelAndView mv = new ModelAndView("venda/pesquisaVenda");
+		mv.addObject("statusVenda", StatusVenda.values());
+		
+		Page<Venda> page = vendaRepository.filtrar(vendaFilter, pageable);
+		PageWrapper<Venda> wrapper = new PageWrapper<>(page, request);
+		
+		mv.addObject("pagina", wrapper);
+		
+		return mv;
+		
 	}
 
 	private ModelAndView mvTabelaItensVenda(String uuid) {

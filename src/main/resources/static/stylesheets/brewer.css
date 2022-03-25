@@ -166,6 +166,31 @@ COMPONENTES
 	text-align: center;
 }
 
+.table-vendas-col-id{
+	text-align: left;
+	width: 10px !important;
+}
+
+.table-vendas-col-cliente{
+	text-align: left;
+	width: 35% !important;
+}
+
+.table-vendas-col-datacriacao{
+	text-align: center;
+	width: 10% !important;
+}
+
+.table-vendas-col-valorTotal{
+	text-align: center;
+	width: 8% !important;
+}
+
+.table-vendas-col-vendedor{
+	text-align: left;
+	width: 25% !important;
+}
+
 /* Tabela Cervejas página de Venda */
 .bw-tabela-cervejas {
 	margin-bottom: 15px;
