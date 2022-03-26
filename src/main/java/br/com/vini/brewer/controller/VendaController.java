@@ -125,7 +125,7 @@ public class VendaController {
 		this.cadastroVendaService.salvar(venda);
 		mailer.enviar(venda);
 		
-		attributes.addFlashAttribute("mensagem", "Venda salva e e-mail enviado!");
+		attributes.addFlashAttribute("mensagem", String.format("Venda n° %d salva com sucesso e e-mail enviado", venda.getId()));
 		
 		return new ModelAndView("redirect:/venda/nova");
 	}
