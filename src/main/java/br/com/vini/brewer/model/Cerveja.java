@@ -179,6 +179,11 @@ public class Cerveja implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	public boolean temFoto() {
+		return StringUtils.hasText(this.foto);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

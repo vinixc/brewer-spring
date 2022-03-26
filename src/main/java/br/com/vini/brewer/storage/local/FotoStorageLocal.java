@@ -66,6 +66,11 @@ public class FotoStorageLocal implements FotoStorage{
 	}
 	
 	@Override
+	public byte[] recuperarThumbnail(String foto) {
+		return recuperarFoto("thumbnail." + foto);
+	}
+	
+	@Override
 	public void salvar(String foto) {
 		try {
 			Files.move(this.localTemporario.resolve(foto), this.local.resolve(foto));

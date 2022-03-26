@@ -1,19 +1,37 @@
 package br.com.vini.brewer.mail;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import br.com.vini.brewer.model.Cerveja;
+import br.com.vini.brewer.model.ItemVenda;
 import br.com.vini.brewer.model.Venda;
+import br.com.vini.brewer.storage.FotoStorage;
 
 @Component
 @PropertySource({"classpath:env/mail-${ambiente:local}.properties"})
 @PropertySource(value = {"file:///srv/config/brewer-mail.properties"}, ignoreResourceNotFound = true)
 public class Mailer {
+	
+	private static Logger logger = LoggerFactory.getLogger(Mailer.class);
 	
 	@Autowired
 	private Environment env;
@@ -21,15 +39,69 @@ public class Mailer {
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	@Autowired
+	private TemplateEngine thymeleaf;
+	
+	@Autowired
+	private FotoStorage fotoStorage;
+	
 	@Async
 	public void enviar(Venda venda) {
 		
-		SimpleMailMessage mensagem = new SimpleMailMessage();
-		mensagem.setFrom(env.getProperty("mail.from"));
-		mensagem.setTo(venda.getCliente().getEmail());
-		mensagem.setSubject("Venda Efetuada");
-		mensagem.setText("Obrigado, sua venda foi processada!");
+		Context context = new Context();
+		context.setVariable("venda", venda);
+		context.setVariable("logo", "logo");
 		
-		mailSender.send(mensagem);
+		Map<String, String> fotos = new HashMap<>();
+		boolean adicionarMockCerveja = false;
+		for(ItemVenda item : venda.getItens()) {
+			Cerveja cerveja = item.getCerveja();
+			
+			if(StringUtils.hasText(cerveja.getFoto())) {
+				String cid = "foto-" + cerveja.getId();
+				context.setVariable(cid, cid);
+				fotos.put(cid, cerveja.getFoto() + "|" + cerveja.getContentType());
+				
+			}else {
+				adicionarMockCerveja = true;
+				context.setVariable("mockCerveja", "mockCerveja");
+			}
+			
+		}
+		
+		String email = thymeleaf.process("mail/resumoVenda", context);
+		
+		try {
+		
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+			helper.setFrom(env.getProperty("mail.from"));
+			helper.setTo(venda.getCliente().getEmail());
+			helper.setSubject("Brewer - Venda realizada");
+			helper.setText(email, true);
+			
+			helper.addInline("logo", new ClassPathResource("static/images/logo-gray.png"));
+			
+			if(adicionarMockCerveja) {
+				helper.addInline("mockCerveja", new ClassPathResource("static/images/cerveja-mock.png"));
+			}
+			
+			for(String cid : fotos.keySet()) {
+				
+				String[] fotoContentType = fotos.get(cid).split("\\|");
+				
+				String foto = fotoContentType[0];
+				String contentType = fotoContentType[1];
+				
+				byte[] arrayFoto = fotoStorage.recuperarThumbnail(foto);
+				helper.addInline(cid, new ByteArrayResource(arrayFoto), contentType);
+			}
+			
+			mailSender.send(mimeMessage);
+		
+		} catch (MessagingException e) {
+			logger.error("Erro enviando e-mail", e);
+		}
 	}
 }

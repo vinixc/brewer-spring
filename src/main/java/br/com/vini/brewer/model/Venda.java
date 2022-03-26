@@ -85,13 +85,15 @@ public class Venda implements Serializable{
 			this.status = StatusVenda.ORCAMENTO;
 	}
 	
+	public BigDecimal getValorTotalItens() {
+		return itens
+			.stream().map(ItemVenda::getValorTotal)
+			.reduce(BigDecimal::add)
+			.orElse(BigDecimal.ZERO);
+	}
+	
 	public void calcularValorTotal() {
-		BigDecimal valorTotalItens = itens
-				.stream().map(ItemVenda::getValorTotal)
-				.reduce(BigDecimal::add)
-				.orElse(BigDecimal.ZERO);
-		
-		this.valorTotal = valorTotalItens
+		this.valorTotal = getValorTotalItens()
 			.add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
 			.subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
 	}
