@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import br.com.vini.brewer.exception.EmailJaCadastradoException;
 import br.com.vini.brewer.model.Usuario;
@@ -23,13 +24,22 @@ public class CadastroUsuarioService {
 	@Transactional
 	public void cadastrar(Usuario usuario) {
 
-		Optional<Usuario> emailJaCadastrado = repository.findByEmail(usuario.getEmail());
-		if(emailJaCadastrado.isPresent()) {
+		Optional<Usuario> usuarioExistente = repository.findByEmail(usuario.getEmail());
+		if(usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
 			throw new EmailJaCadastradoException("E-mail já cadastrado!");
 		}
 		
-		if(usuario.isNovo()) {
+		if(usuario.isNovo() || !StringUtils.isEmpty(usuario.getSenha())) {
 			usuario.criptografaPassword(passwordEncoder);
+		}
+		
+		if(usuario.isEdicao() && StringUtils.isEmpty(usuario.getSenha())) {
+			usuario.setSenha(usuarioExistente.get().getSenha());
+			usuario.setConfirmacaoSenha(usuario.getSenha());
+		}
+		
+		if(usuario.isEdicao() && usuario.getAtivo() == null) {
+			usuario.setAtivo(usuarioExistente.get().getAtivo());
 		}
 		
 		repository.save(usuario);

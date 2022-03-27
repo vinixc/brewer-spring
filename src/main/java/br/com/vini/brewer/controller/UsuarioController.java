@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class UsuarioController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/novo", method = RequestMethod.POST)
+	@RequestMapping(value = {"/novo", "{\\+d}"}, method = RequestMethod.POST)
 	public ModelAndView cadastrar(@Valid Usuario usuario, BindingResult result, Model model, RedirectAttributes attributes) {
 		
 		if(result.hasErrors()) {
@@ -92,4 +93,13 @@ public class UsuarioController {
 	public void atualizarStatus(@RequestParam("ids[]") Long[] ids, @RequestParam("status") StatusUsuario status) {
 		this.cadastroUsuarioService.alterarStatus(ids,status);
 	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable("codigo") Long codigo) {
+		Usuario usuario = usuarioRepository.buscarComGrupos(codigo);
+		ModelAndView mv = novo(usuario);
+		mv.addObject(usuario);
+		return mv;
+	}
+	
 }

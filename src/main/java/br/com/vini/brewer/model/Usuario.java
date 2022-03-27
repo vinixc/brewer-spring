@@ -79,6 +79,10 @@ public class Usuario implements Serializable{
 		return this.id == null;
 	}
 	
+	public boolean isEdicao() {
+		return !isNovo();
+	}
+	
 	public void criptografaPassword(PasswordEncoder passwordEncoder) {
 		this.senha = passwordEncoder.encode(this.senha);
 		this.confirmacaoSenha = senha;

@@ -15,6 +15,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -108,5 +109,15 @@ public class UsuarioRepositoryImpl extends AbstractRepositoryImpl<Usuario> imple
 		return manager.createQuery("SELECT DISTINCT p.nome FROM Usuario u INNER JOIN u.grupos g INNER JOIN g.permissoes p WHERE u = :usuario", String.class)
 					.setParameter("usuario", usuario)
 					.getResultList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario buscarComGrupos(Long codigo) {
+		Criteria criteria = getCriteria();
+		criteria.createAlias("grupos", "g", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.eq("id", codigo));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return (Usuario) criteria.uniqueResult();
 	}
 }

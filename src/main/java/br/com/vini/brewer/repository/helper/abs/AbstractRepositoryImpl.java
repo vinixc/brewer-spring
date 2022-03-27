@@ -65,11 +65,14 @@ public abstract class AbstractRepositoryImpl<T>{
 		}
 	}
 	protected void initCriterias() {
+		this.criteria = getCriteria();
+		this.criteriaCount = getCriteria();
+	}
+	
+	protected Criteria getCriteria() {
 		ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
 		Type type = genericSuperclass.getActualTypeArguments()[0];
-
-		this.criteria = getEntityManage().unwrap(Session.class).createCriteria(type.getTypeName());
-		this.criteriaCount = getEntityManage().unwrap(Session.class).createCriteria(type.getTypeName());
+		return getEntityManage().unwrap(Session.class).createCriteria(type.getTypeName());
 	}
 	
 	/**
