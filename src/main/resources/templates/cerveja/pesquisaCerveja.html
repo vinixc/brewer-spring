@@ -4,7 +4,8 @@
 	xmlns:th="http://thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layoutPadrao"
-	xmlns:brewer="http://brewer.com">
+	xmlns:brewer="http://brewer.com"
+	xmlns:data="http://wwww.thymeleaf.org/extras/data">
 	
 <head>
 	<title>Pesquisa de Cerveja</title>
@@ -132,7 +133,9 @@
 							<a class="btn btn-link btn-xs js-tooltip" title="Editar">
 								<i class="glyphicon glyphicon-pencil"></i>
 							</a>
-							<a class="btn btn-link btn-xs" title="Excluir">
+							<a class="btn btn-link btn-xs js-tooltip js-exclusao-btn" title="Excluir" href="#" 
+								data:url="@{/cerveja/{codigo}(codigo=${cerveja.id})}"
+								data:objeto="${cerveja.nome}">
 								<i class="glyphicon glyphicon-remove"></i>
 							</a>
 						</td>

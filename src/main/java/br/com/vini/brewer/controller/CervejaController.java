@@ -10,10 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.dto.CervejaDTO;
+import br.com.vini.brewer.exception.ImpossivelExcluirEntidadeException;
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.model.Origem;
 import br.com.vini.brewer.model.Sabor;
@@ -86,5 +90,17 @@ public class CervejaController {
 	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<CervejaDTO> pesquisar(String skuOuNome){
 		return this.cervejaRepository.porSkuOuNome(skuOuNome);
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public @ResponseBody ResponseEntity<?> excluir(@PathVariable("codigo") Cerveja cerveja){
+		
+		try {
+			cadastroCervejaService.excluir(cerveja);
+		}catch (ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 }

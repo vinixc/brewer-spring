@@ -19,6 +19,7 @@ import net.coobird.thumbnailator.name.Rename;
 public class FotoStorageLocal implements FotoStorage{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FotoStorageLocal.class);
+	private static String THUMBNAIL_PREFIX = "thumbnail.";
 	
 	private Path local;
 	private Path localTemporario;
@@ -67,7 +68,17 @@ public class FotoStorageLocal implements FotoStorage{
 	
 	@Override
 	public byte[] recuperarThumbnail(String foto) {
-		return recuperarFoto("thumbnail." + foto);
+		return recuperarFoto(THUMBNAIL_PREFIX + foto);
+	}
+	
+	@Override
+	public void excluir(String nomeFoto) {
+		try {
+			Files.deleteIfExists(this.local.resolve(nomeFoto));
+			Files.deleteIfExists(this.local.resolve(THUMBNAIL_PREFIX + nomeFoto));
+		} catch (IOException e) {
+			LOGGER.warn(String.format("Erro apagando foto '%s'. Mensagem: %s", nomeFoto, e.getMessage()));
+		}
 	}
 	
 	@Override

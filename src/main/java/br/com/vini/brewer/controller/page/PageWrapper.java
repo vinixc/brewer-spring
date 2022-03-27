@@ -21,7 +21,7 @@ public class PageWrapper<T> {
 		//Comentando linha acima a fim de corrigir a pesquisa com espaço
 		String httpUrl = request.getRequestURL().append(
 				request.getQueryString() != null ? "?" + request.getQueryString() : ""
-		).toString().replaceAll("\\+", "%20");
+		).toString().replaceAll("\\+", "%20").replaceAll("excluido", "");
 		
 		this.uriBuilder = UriComponentsBuilder.fromHttpUrl(httpUrl);
 	}
