@@ -62,6 +62,8 @@ public abstract class AbstractRepositoryImpl<T>{
 			Sort.Order order = sort.iterator().next();
 			String field = order.getProperty();
 			criteria.addOrder(order.isAscending() ? Order.asc(field) : Order.desc(field));
+		}else {
+			criteria.addOrder(Order.desc("id"));
 		}
 	}
 	protected void initCriterias() {

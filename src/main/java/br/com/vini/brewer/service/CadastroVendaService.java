@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,9 @@ public class CadastroVendaService {
 	
 	@Transactional
 	public void salvar(Venda venda) {
+		if(!venda.isSalvarPermitido()) {
+			throw new RuntimeException("Usuário tentando salvar uma venda cancelada!");
+		}
 		
 		if(venda.getDataEntrega() != null) {
 			venda.setDataHoraEntrega(LocalDateTime.of(venda.getDataEntrega(), venda.getHoraEntrega() != null ? venda.getHoraEntrega() : LocalTime.NOON));
@@ -37,5 +41,13 @@ public class CadastroVendaService {
 	public void emitir(Venda venda) {
 		venda.setStatus(StatusVenda.EMITIDA);
 		salvar(venda);
+	}
+
+	@Transactional
+	@PreAuthorize("#venda.usuario == principal.usuario or hasRole('CANCELAR_VENDA')")
+	public void cancelar(Venda venda) {
+		Venda vendaExistente = vendaRepository.findOne(venda.getId());
+		vendaExistente.setStatus(StatusVenda.CANCELADA);
+		this.vendaRepository.save(vendaExistente);
 	}
 }

@@ -26,11 +26,13 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.util.ObjectUtils;
 
 @Entity
 @Table(name = "venda")
 @SequenceGenerator(name = "venda_seq", sequenceName = "venda_seq", allocationSize = 1, initialValue = 1)
+@DynamicUpdate
 public class Venda implements Serializable{
 	private static final long serialVersionUID = 5554330721371502006L;
 	
@@ -106,6 +108,10 @@ public class Venda implements Serializable{
 	
 	public boolean isNova() {
 		return this.id == null;
+	}
+	
+	public boolean isSalvarPermitido() {
+		return !status.equals(StatusVenda.CANCELADA);
 	}
 	
 	public Long getId() {

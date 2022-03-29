@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
@@ -82,7 +83,11 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 		criteria.add(Restrictions.eq("id", codigo));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
-		return (Venda) criteria.uniqueResult();
+		Venda venda = (Venda) criteria.uniqueResult();
+		Hibernate.initialize(venda.getUsuario());
+		Hibernate.initialize(venda.getUsuario().getGrupos());
+		
+		return venda;
 	}
 
 	@Override

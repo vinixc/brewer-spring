@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -129,6 +130,18 @@ public class VendaController {
 		return new ModelAndView("redirect:/venda/nova");
 	}
 	
+	@PostMapping(value = "/nova", params = "cancelar")
+	public ModelAndView cancelar(Venda venda, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+		try {
+			this.cadastroVendaService.cancelar(venda);
+		}catch (AccessDeniedException e) {
+			return new ModelAndView("/403");
+		}
+		
+		attributes.addFlashAttribute("mensagem", String.format("Venda n° %d cancelada com sucesso", venda.getId()));
+		return new ModelAndView("redirect:/venda/" + venda.getId());
+	}
+	
 	@PostMapping("/item")
 	public ModelAndView adicionarItem(Long idCerveja, String uuid) {
 		
@@ -168,7 +181,7 @@ public class VendaController {
 	@GetMapping("/{codigo}")
 	public ModelAndView editar(@PathVariable Long codigo) {
 		Venda venda = vendaRepository.buscarComItens(codigo);
-		
+
 		setUuid(venda);
 		for(ItemVenda item : venda.getItens()) {
 			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(), item.getQuantidade());
