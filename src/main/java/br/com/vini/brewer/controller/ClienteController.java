@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -91,6 +92,16 @@ public class ClienteController {
 		validarTamanhoNome(nome);
 		return this.clienteRepository.findByNomeStartingWithIgnoreCase(nome);
 	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable("codigo") Long id) {
+		Cliente cliente = this.clienteRepository.carregarComCidade(id);
+		ModelAndView mv = novo(cliente);
+		mv.addObject(cliente);
+		
+		return mv;
+	}
+	
 
 	private void validarTamanhoNome(String nome) {
 		if(StringUtils.isEmpty(nome) || nome.length() < 3) {

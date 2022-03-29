@@ -92,6 +92,14 @@ public class Cliente implements Serializable{
 	public String getCpfOuCnpjSemFormatacao() {
 		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
+	
+	public boolean isNovo() {
+		return this.id == null;
+	}
+	
+	public boolean isAlteracao() {
+		return !isNovo();
+	}
 
 	public String getNome() {
 		return nome;
@@ -143,6 +151,10 @@ public class Cliente implements Serializable{
 
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override

@@ -9,5 +9,5 @@ import br.com.vini.brewer.repository.filter.ClienteFilter;
 public interface ClienteRepositoryQuery {
 	
 	Page<Cliente> filtrar(ClienteFilter clienteFilter, Pageable pageable);
-
+	Cliente carregarComCidade(Long id);
 }

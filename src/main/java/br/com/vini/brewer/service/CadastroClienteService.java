@@ -21,7 +21,7 @@ public class CadastroClienteService {
 		
 		Optional<Cliente> clienteExistente = clienteRepository.findByCpfOuCnpj(cliente.getCpfOuCnpjSemFormatacao());
 		
-		if(clienteExistente.isPresent()) {
+		if(clienteExistente.isPresent() && cliente.isNovo()) {
 			throw new CpfCnpjClienteJaCadastradoException("CPF/CNPJ já cadastrado");
 		}
 		

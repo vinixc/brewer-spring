@@ -47,6 +47,23 @@ public class ClienteRepositoryImpl extends AbstractRepositoryImpl<Cliente>  impl
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public Cliente carregarComCidade(Long id) {
+		Criteria criteria = getCriteria();
+		criteria.createAlias("endereco.cidade", "c", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("c.estado", "e", JoinType.LEFT_OUTER_JOIN);
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		criteria.add(Restrictions.eq("id", id));
+		Cliente cliente = (Cliente) criteria.uniqueResult();
+		
+		if(cliente.getEndereco() != null && cliente.getEndereco().getCidade() != null) {
+			cliente.getEndereco().setEstado(cliente.getEndereco().getCidade().getEstado());
+		}
+		
+		return cliente;
+	}
+	
+	@Override
 	protected EntityManager getEntityManage() {
 		return manager;
 	}
