@@ -9,5 +9,7 @@ import br.com.vini.brewer.repository.filter.VendaFilter;
 public interface VendaRepositoryQuery {
 	
 	public Page<Venda> filtrar(VendaFilter filter, Pageable pageable);
+	
+	Venda buscarComItens(Long codigo);
 
 }

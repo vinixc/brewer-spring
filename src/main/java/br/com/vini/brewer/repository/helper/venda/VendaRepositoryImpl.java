@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 	private EntityManager manager;
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public Page<Venda> filtrar(VendaFilter filter, Pageable pageable) {
 		return super.filtrar(filter, pageable);
 	}
@@ -72,9 +73,21 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 		}
 		
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Venda buscarComItens(Long codigo) {
+		Criteria criteria = getCriteria();
+		criteria.createAlias("itens", "i", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.eq("id", codigo));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		
+		return (Venda) criteria.uniqueResult();
+	}
 
 	@Override
 	protected EntityManager getEntityManage() {
 		return manager;
 	}
+	
 }

@@ -27,6 +27,7 @@ import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.controller.validator.VendaValidator;
 import br.com.vini.brewer.mail.Mailer;
 import br.com.vini.brewer.model.Cerveja;
+import br.com.vini.brewer.model.ItemVenda;
 import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
 import br.com.vini.brewer.repository.CervejaRepository;
@@ -67,9 +68,7 @@ public class VendaController {
 	public ModelAndView nova(Venda venda) {
 		ModelAndView mv = new ModelAndView("venda/cadastroVenda");
 		
-		if(StringUtils.isEmpty(venda.getUuid())) {
-			venda.setUuid(UUID.randomUUID().toString());
-		}
+		setUuid(venda);
 		
 		mv.addObject("itens", venda.getItens());
 		mv.addObject("valorFrete", venda.getValorFrete());
@@ -164,6 +163,27 @@ public class VendaController {
 		
 		return mv;
 		
+	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Venda venda = vendaRepository.buscarComItens(codigo);
+		
+		setUuid(venda);
+		for(ItemVenda item : venda.getItens()) {
+			tabelaItens.adicionarItem(venda.getUuid(), item.getCerveja(), item.getQuantidade());
+		}
+		
+		ModelAndView mv = nova(venda);
+		mv.addObject(venda);
+		
+		return mv;
+	}
+
+	private void setUuid(Venda venda) {
+		if(StringUtils.isEmpty(venda.getUuid())) {
+			venda.setUuid(UUID.randomUUID().toString());
+		}
 	}
 
 	private ModelAndView mvTabelaItensVenda(String uuid) {

@@ -118,7 +118,9 @@
 								<td th:text="${venda.usuario.nome}">Vinicius</td>
 								<td th:text="${venda.status.descricao}">Orçamento</td>
 								<td class="text-center">
-									<a class="btn btn-link btn-xs js-tooltip" title="Editar">
+									<a class="btn btn-link btn-xs js-tooltip" title="Editar" 
+										th:href="@{/venda/{codigo}(codigo=${venda.id})}">
+										
 										<i class="glyphicon glyphicon-pencil"></i>
 									</a>
 								</td>
