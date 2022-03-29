@@ -12,10 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.controller.page.PageWrapper;
+import br.com.vini.brewer.exception.ImpossivelExcluirEntidadeException;
 import br.com.vini.brewer.exception.NomeCidadeJaCadastradaException;
 import br.com.vini.brewer.model.Cidade;
 import br.com.vini.brewer.repository.CidadeRepository;
@@ -96,5 +100,26 @@ public class CidadeController {
 		mv.addObject("estados", estadoRepository.findAll());
 		
 		return mv;
+	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable("codigo") Long id) {
+		Cidade cidade = cidadeRepository.carregarCidadeComEstado(id);
+		ModelAndView mv = novo(cidade);
+		mv.addObject(cidade);
+		
+		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public @ResponseBody ResponseEntity<?> excluir(@PathVariable("codigo") Long id){
+		
+		try {
+			this.cadastroCidadeService.excluir(id);
+		}catch (ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 }

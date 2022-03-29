@@ -49,4 +49,13 @@ public class CidadeRepositoryImpl extends AbstractRepositoryImpl<Cidade> impleme
 		return manager;
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Cidade carregarCidadeComEstado(Long id) {
+		Criteria criteria = getCriteria();
+		criteria.createAlias("estado", "e", JoinType.INNER_JOIN);
+		criteria.add(Restrictions.eq("id", id));
+		
+		return (Cidade) criteria.uniqueResult();
+	}
 }

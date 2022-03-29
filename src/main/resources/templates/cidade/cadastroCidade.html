@@ -36,6 +36,8 @@
 
 <form method="POST" th:object="${cidade}" th:action="@{/cidade/nova}" class="form-vertical  js-form-loading">
 
+	<input type="hidden" th:field="*{id}">
+
 	<brewer:message/>
 
 			<div class="row">

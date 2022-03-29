@@ -9,5 +9,6 @@ import br.com.vini.brewer.repository.filter.CidadeFilter;
 public interface CidadeRepositoryQuery {
 	
 	Page<Cidade> filtrar(CidadeFilter cidadeFilter, Pageable pageable);
+	Cidade carregarCidadeComEstado(Long id);
 
 }

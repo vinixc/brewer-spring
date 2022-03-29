@@ -5,7 +5,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layoutPadrao"
 	xmlns:brewer="http://brewer.com"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:data="http://wwww.thymeleaf.org/extras/data">
 	
 
 	<head>
@@ -82,10 +83,14 @@
 								 
 								
 								<td class="text-left" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
-									<a class="btn btn-link btn-xs js-tooltip" title="Editar">
+									<a class="btn btn-link btn-xs js-tooltip" title="Editar" 
+										th:href="@{/cidade/{codigo}(codigo=${cidade.id})}">
+										
 										<i class="glyphicon glyphicon-pencil"></i>
 									</a>
-									<a class="btn btn-link btn-xs" title="Excluir" >
+									<a class="btn btn-link btn-xs js-exclusao-btn" title="Excluir" 
+										data:url="@{/cidade/{codigo}(codigo=${cidade.id})}"
+										data:objeto="${cidade.nome}">
 										<i class="glyphicon glyphicon-remove"></i>
 									</a>
 								</td>
