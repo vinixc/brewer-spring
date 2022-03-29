@@ -4,7 +4,8 @@
 	xmlns:th="http://thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/layoutPadrao"
-	xmlns:brewer="http://brewer.com">
+	xmlns:brewer="http://brewer.com"
+	xmlns:data="http://wwww.thymeleaf.org/extras/data">
 	
 <head>
 	<title>Pesquisa de Estilo</title>
@@ -73,7 +74,9 @@
 							<a class="btn btn-link btn-xs js-tooltip" title="Editar" th:href="@{/estilo/{codigo}(codigo=${estilo.id})}">
 								<i class="glyphicon glyphicon-pencil"></i>
 							</a>
-							<a class="btn btn-link btn-xs" title="Excluir">
+							<a class="btn btn-link btn-xs js-exclusao-btn" title="Excluir" href="#" 
+								data:url="@{/estilo/{codigo}(codigo=${estilo.id})}"
+								data:objeto="${estilo.nome}">
 								<i class="glyphicon glyphicon-remove"></i>
 							</a>
 						</td>
