@@ -67,8 +67,7 @@ public abstract class AbstractRepositoryImpl<T>{
 			String field = order.getProperty();
 			criteria.addOrder(order.isAscending() ? Order.asc(field) : Order.desc(field));
 		}else {
-			ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
-			Type type = genericSuperclass.getActualTypeArguments()[0];
+			Type type = getType();
 			try {
 				List<Field> fields = Arrays.asList(Class.forName(type.getTypeName()).getDeclaredFields());
 				Field fieldId = fields.stream()
@@ -90,8 +89,7 @@ public abstract class AbstractRepositoryImpl<T>{
 	}
 	
 	protected Criteria getCriteria() {
-		ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
-		Type type = genericSuperclass.getActualTypeArguments()[0];
+		Type type = getType();
 		return getEntityManage().unwrap(Session.class).createCriteria(type.getTypeName());
 	}
 	
@@ -103,4 +101,10 @@ public abstract class AbstractRepositoryImpl<T>{
 	 */
 	protected  abstract void adicionaRestricoes(Filter filter,Criteria criteria);
 	protected abstract EntityManager getEntityManage();
+	
+	private Type getType() {
+		ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+		Type type = genericSuperclass.getActualTypeArguments()[0];
+		return type;
+	}
 }
