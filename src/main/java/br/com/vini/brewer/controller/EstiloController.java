@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,6 +51,8 @@ public class EstiloController {
 			return novo(estilo);
 		}
 		
+		boolean alteracao = estilo.isAlteracao();
+		
 		try {
 			cadastroEstiloService.salvar(estilo);
 		}catch (NomeEstiloJaCadastradoException e) {
@@ -59,7 +62,7 @@ public class EstiloController {
 		
 		attributes.addFlashAttribute("mensagem","Estilo salvo com sucesso!");
 		
-		return new ModelAndView("redirect:/estilo/novo");
+		return new ModelAndView(alteracao ? "redirect:/estilo/" + estilo.getId() : "redirect:/estilo/novo");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -83,6 +86,15 @@ public class EstiloController {
 		PageWrapper<Estilo> pageWrapper = new PageWrapper<>(page, httpServletRequest);
 		
 		mv.addObject("pagina", pageWrapper);
+		
+		return mv;
+	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable("codigo") Long id) {
+		Estilo estilo = repository.findOne(id);
+		ModelAndView mv = novo(estilo);
+		mv.addObject(estilo);
 		
 		return mv;
 	}

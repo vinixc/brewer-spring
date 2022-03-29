@@ -37,6 +37,8 @@
 <th:block th:include="fragments/mensagemSucesso"></th:block>
 
 	<form method="POST" th:object="${estilo}" th:action="@{/estilo/novo}" class="form-vertical  js-form-loading">
+				
+				<input type="hidden" th:field="*{id}"/>
 	
 				<th:block th:include="fragments/mensagensErroValidacao"></th:block>
 	

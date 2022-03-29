@@ -57,6 +57,14 @@ public class Estilo implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public boolean isNovo() {
+		return this.id == null;
+	}
+	
+	public boolean isAlteracao() {
+		return !isNovo();
+	}
 
 	@Override
 	public int hashCode() {
