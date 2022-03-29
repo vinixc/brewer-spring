@@ -2,6 +2,8 @@ package br.com.vini.brewer.service;
 
 import java.util.Optional;
 
+import javax.persistence.PersistenceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.com.vini.brewer.exception.EmailJaCadastradoException;
+import br.com.vini.brewer.exception.ImpossivelExcluirEntidadeException;
 import br.com.vini.brewer.model.Usuario;
 import br.com.vini.brewer.repository.UsuarioRepository;
 
@@ -48,5 +51,16 @@ public class CadastroUsuarioService {
 	@Transactional
 	public void alterarStatus(Long[] ids, StatusUsuario status) {
 		status.executar(ids, repository);
+	}
+
+	@Transactional
+	public void excluir(Long id) {
+		try {
+			Usuario usuario = repository.getOne(id);
+			repository.delete(usuario);
+			repository.flush();
+		}catch (PersistenceException e) {
+			throw new ImpossivelExcluirEntidadeException("Não foi possivel deletar esse usuario! O mesmo já foi utilizado em sistema!");
+		}
 	}
 }
