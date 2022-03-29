@@ -1,9 +1,13 @@
 package br.com.vini.brewer.repository.helper.abs;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Id;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -63,7 +67,21 @@ public abstract class AbstractRepositoryImpl<T>{
 			String field = order.getProperty();
 			criteria.addOrder(order.isAscending() ? Order.asc(field) : Order.desc(field));
 		}else {
-			criteria.addOrder(Order.desc("id"));
+			ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+			Type type = genericSuperclass.getActualTypeArguments()[0];
+			try {
+				List<Field> fields = Arrays.asList(Class.forName(type.getTypeName()).getDeclaredFields());
+				Field fieldId = fields.stream()
+					.filter(f -> f.isAnnotationPresent(Id.class))
+					.findAny().orElse(null);
+				
+				if(fieldId != null) {
+					criteria.addOrder(Order.desc(fieldId.getName()));
+				}
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	protected void initCriterias() {
