@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.exception.CpfCnpjClienteJaCadastradoException;
+import br.com.vini.brewer.exception.ImpossivelExcluirEntidadeException;
 import br.com.vini.brewer.model.Cliente;
 import br.com.vini.brewer.model.TipoPessoa;
 import br.com.vini.brewer.repository.ClienteRepository;
@@ -100,6 +102,18 @@ public class ClienteController {
 		mv.addObject(cliente);
 		
 		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public @ResponseBody ResponseEntity<?> excluir(@PathVariable("codigo") Long id){
+		
+		try {
+			this.cadastroClienteService.excluir(id);
+		}catch (ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 	
 
