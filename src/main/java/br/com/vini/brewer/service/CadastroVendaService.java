@@ -31,7 +31,10 @@ public class CadastroVendaService {
 		if(!venda.isNova()) {
 			Venda vendaExistente = vendaRepository.findOne(venda.getId());
 			venda.setDataCriacao(vendaExistente.getDataCriacao());
-			venda.setStatus(vendaExistente.getStatus());
+			
+			if(!(venda.getStatus().equals(StatusVenda.EMITIDA) && !venda.getStatus().equals(vendaExistente.getStatus()))) {
+				venda.setStatus(vendaExistente.getStatus());
+			}
 		}
 		
 		this.vendaRepository.save(venda);

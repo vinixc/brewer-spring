@@ -1,6 +1,10 @@
 package br.com.vini.brewer.repository.helper.venda;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
+import java.time.MonthDay;
+import java.time.Year;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
 import br.com.vini.brewer.repository.filter.Filter;
 import br.com.vini.brewer.repository.filter.VendaFilter;
@@ -29,6 +34,42 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 	@Transactional(readOnly = true)
 	public Page<Venda> filtrar(VendaFilter filter, Pageable pageable) {
 		return super.filtrar(filter, pageable);
+	}
+	
+	@Override
+	public BigDecimal valorTotalNoAno() {
+		
+		Optional<BigDecimal> optional = 
+				Optional.ofNullable(manager.createQuery("SELECT SUM(valorTotal) FROM Venda WHERE year(dataCriacao) = :ano and status = :status ", BigDecimal.class)
+						.setParameter("ano", Year.now().getValue())
+						.setParameter("status", StatusVenda.EMITIDA)
+						.getSingleResult());
+		
+		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public BigDecimal valorTotalNoMes() {
+		Optional<BigDecimal> optional = 
+				Optional.ofNullable(manager.createQuery("SELECT SUM(valorTotal) FROM Venda WHERE month(dataCriacao) = :mes and status = :status ", BigDecimal.class)
+						.setParameter("mes", MonthDay.now().getMonthValue())
+						.setParameter("status", StatusVenda.EMITIDA)
+						.getSingleResult());
+		
+		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public BigDecimal valorTickerMedioNoAno() {
+		
+		Optional<BigDecimal> optional = 
+				Optional.ofNullable(
+						manager.createQuery("SELECT SUM(valorTotal) / count(*) FROM Venda WHERE year(dataCriacao) = :ano and status = :status ", BigDecimal.class)
+						.setParameter("ano", Year.now().getValue())
+						.setParameter("status", StatusVenda.EMITIDA)
+						.getSingleResult());
+		
+		return optional.orElse(BigDecimal.ZERO);
 	}
 
 	@Override
@@ -94,5 +135,4 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 	protected EntityManager getEntityManage() {
 		return manager;
 	}
-	
 }
