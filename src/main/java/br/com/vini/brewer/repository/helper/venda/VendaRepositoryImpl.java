@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import br.com.vini.brewer.dto.VendaMes;
+import br.com.vini.brewer.dto.VendaOrigem;
 import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
 import br.com.vini.brewer.repository.filter.Filter;
@@ -57,6 +58,26 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 		}
 		
 		return vendasMes;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<VendaOrigem> totalPorOrigem() {
+		List<VendaOrigem> vendasOrigem = manager.createNamedQuery("Vendas.totalOrigem").getResultList();
+		
+		LocalDate hoje = LocalDate.now();
+		for(int i = 1; i <= 6; i++) {
+			String mesIdeal = String.format("%d/%02d", hoje.getYear(), hoje.getMonthValue());
+			boolean possuiMes = vendasOrigem.stream().filter(v -> v.getMes().equals(mesIdeal)).findAny().isPresent();
+			
+			if(!possuiMes) {
+				vendasOrigem.add(i - 1, new VendaOrigem(mesIdeal, 0,0));
+			}
+			
+			hoje = hoje.minusMonths(1);
+		}
+		
+		return vendasOrigem;
 	}
 	
 	@Override

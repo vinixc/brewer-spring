@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.controller.validator.VendaValidator;
 import br.com.vini.brewer.dto.VendaMes;
+import br.com.vini.brewer.dto.VendaOrigem;
 import br.com.vini.brewer.exception.QuantidadeInsuficienteException;
 import br.com.vini.brewer.mail.Mailer;
 import br.com.vini.brewer.model.Cerveja;
@@ -204,6 +205,11 @@ public class VendaController {
 	@GetMapping("/totalPorMes")
 	public @ResponseBody List<VendaMes> listarTotalVendaPorMes(){
 		return vendaRepository.totalPorMes();
+	}
+	
+	@GetMapping("/totalPorOrigem")
+	public @ResponseBody List<VendaOrigem> listarTotalVendaPorOrigem(){
+		return vendaRepository.totalPorOrigem();
 	}
 
 	private void setUuid(Venda venda) {
