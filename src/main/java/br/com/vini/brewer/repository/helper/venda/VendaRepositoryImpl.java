@@ -1,9 +1,11 @@
 package br.com.vini.brewer.repository.helper.venda;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import br.com.vini.brewer.dto.VendaMes;
 import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
 import br.com.vini.brewer.repository.filter.Filter;
@@ -34,6 +37,26 @@ public class VendaRepositoryImpl extends AbstractRepositoryImpl<Venda> implement
 	@Transactional(readOnly = true)
 	public Page<Venda> filtrar(VendaFilter filter, Pageable pageable) {
 		return super.filtrar(filter, pageable);
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<VendaMes> totalPorMes() {
+		List<VendaMes> vendasMes = manager.createNamedQuery("Vendas.totalPorMes").getResultList();
+		
+		LocalDate hoje = LocalDate.now();
+		for(int i = 1; i <= 6; i++) {
+			String mesIdeal = String.format("%d/%02d", hoje.getYear(), hoje.getMonthValue());
+			boolean possuiMes = vendasMes.stream().filter(v -> v.getMes().equals(mesIdeal)).findAny().isPresent();
+			
+			if(!possuiMes) {
+				vendasMes.add(i - 1, new VendaMes(mesIdeal, 0));
+			}
+			
+			hoje = hoje.minusMonths(1);
+		}
+		
+		return vendasMes;
 	}
 	
 	@Override

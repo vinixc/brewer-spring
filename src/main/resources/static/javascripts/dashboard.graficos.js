@@ -7,26 +7,39 @@ Brewer.GraficoVendaPorMes = (function(){
 	}
 	
 	GraficoVendaPorMes.prototype.iniciar = function(){
+		
+		$.ajax({
+			url: 'venda/totalPorMes',
+			method: 'GET',
+			success: onDadosRecebidos.bind(this)
+		})
+		
+		
+	}
+	
+	function onDadosRecebidos(vendaMes){
+		var meses = [];
+		var valores = [];
+		vendaMes.forEach(function(obj){
+			meses.unshift(obj.mes);
+			valores.unshift(obj.total);
+		});
+		
 		var graficoVendasPorMes = new Chart(this.ctx,{
 			type: 'line',
 			data: {
-				labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Jun'],
+				labels: meses,
 				datasets: [
 					{
 						label: 'Vendas por mês',
 						backgroundColor: "rgba(26,179,148,0.5)",
 						pointBorderColor: "rgba(26,179,148,1)",
 						pointBackgroundColor: "#fff",
-						data: [
-							10,5,7,2,9
-						]
+						data: valores
 					}
 				]
 			},
 		});
-		
-		
-		
 	}
 	
 	return GraficoVendaPorMes;
