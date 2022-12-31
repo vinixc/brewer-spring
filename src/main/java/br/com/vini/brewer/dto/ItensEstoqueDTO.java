@@ -2,7 +2,6 @@ package br.com.vini.brewer.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class ItensEstoqueDTO implements Serializable{ 
 	private static final long serialVersionUID = -7414098603658921981L;
