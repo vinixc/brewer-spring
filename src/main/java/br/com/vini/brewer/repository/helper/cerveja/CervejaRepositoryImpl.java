@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import br.com.vini.brewer.dto.CervejaDTO;
+import br.com.vini.brewer.dto.ItensEstoqueDTO;
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.repository.filter.CervejaFilter;
 import br.com.vini.brewer.repository.filter.Filter;
@@ -82,5 +83,11 @@ public class CervejaRepositoryImpl extends AbstractRepositoryImpl<Cerveja> imple
 			.getResultList();
 		
 		return cervajasFiltradas;
+	}
+
+	@Override
+	public ItensEstoqueDTO valorItensEstoque() {
+		String sql = "SELECT new br.com.vini.brewer.dto.ItensEstoqueDTO(SUM(quantidadeEstoque * valor), SUM(quantidadeEstoque)) from Cerveja";
+		return manager.createQuery(sql, ItensEstoqueDTO.class).getSingleResult();
 	}
 }
