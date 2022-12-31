@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,12 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.vini.brewer.model.StatusVenda;
 import br.com.vini.brewer.model.Venda;
 import br.com.vini.brewer.repository.VendaRepository;
+import br.com.vini.brewer.service.event.venda.VendaEvent;
 
 @Service
 public class CadastroVendaService {
 	
 	@Autowired
 	private VendaRepository vendaRepository;
+	
+	@Autowired
+	private ApplicationEventPublisher publish;
 	
 	@Transactional
 	public void salvar(Venda venda) {
@@ -44,6 +49,8 @@ public class CadastroVendaService {
 	public void emitir(Venda venda) {
 		venda.setStatus(StatusVenda.EMITIDA);
 		salvar(venda);
+		
+		publish.publishEvent(new VendaEvent(venda));
 	}
 
 	@Transactional

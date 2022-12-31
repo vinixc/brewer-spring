@@ -199,6 +199,11 @@ public class Cerveja implements Serializable{
 	public void setNovaFoto(boolean novaFoto) {
 		this.novaFoto = novaFoto;
 	}
+	
+	public void informarRetiradaEstoque(Integer quantidade) {
+		if(this.quantidadeEstoque == null || this.quantidadeEstoque < 0) this.quantidadeEstoque = 0;
+		this.quantidadeEstoque -= quantidade;
+	}
 
 	@Override
 	public int hashCode() {

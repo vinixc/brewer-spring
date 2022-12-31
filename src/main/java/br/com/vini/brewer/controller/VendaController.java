@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.vini.brewer.controller.page.PageWrapper;
 import br.com.vini.brewer.controller.validator.VendaValidator;
 import br.com.vini.brewer.dto.VendaMes;
+import br.com.vini.brewer.exception.QuantidadeInsuficienteException;
 import br.com.vini.brewer.mail.Mailer;
 import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.model.ItemVenda;
@@ -108,7 +109,11 @@ public class VendaController {
 		
 		venda.setUsuario(usuarioSistema.getUsuario());
 		
-		this.cadastroVendaService.emitir(venda);
+		try {
+			this.cadastroVendaService.emitir(venda);
+		}catch (QuantidadeInsuficienteException e) {
+			
+		}
 		
 		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso!");
 		

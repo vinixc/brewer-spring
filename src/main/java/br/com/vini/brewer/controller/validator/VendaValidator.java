@@ -2,16 +2,22 @@ package br.com.vini.brewer.controller.validator;
 
 import java.math.BigDecimal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import br.com.vini.brewer.model.Cerveja;
 import br.com.vini.brewer.model.Venda;
+import br.com.vini.brewer.repository.CervejaRepository;
 
 @Component
 public class VendaValidator implements Validator{
 
+	@Autowired
+	private CervejaRepository cervejaRepository;
+	
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return Venda.class.isAssignableFrom(clazz);
@@ -27,6 +33,16 @@ public class VendaValidator implements Validator{
 		validarSeInformouApenasHorarioDaEntrega(errors, venda);
 		validarSeInformouItens(errors, venda);
 		validarValorTotalNegativo(errors, venda);
+		validarQuantidadeEstoque(errors,venda);
+	}
+
+	private void validarQuantidadeEstoque(Errors errors, Venda venda) {
+		venda.getItens().forEach(i -> {
+			Cerveja cerveja = cervejaRepository.findOne(i.getCerveja().getId());
+			if(cerveja.getQuantidadeEstoque() < i.getQuantidade()) {
+				errors.reject("", String.format("Cerveja %s sem quantidade suficiente para atender o pedido! [Quantidade em estoque %s]", cerveja.getNome(), cerveja.getQuantidadeEstoque()));
+			}
+		});
 	}
 
 	private void validarValorTotalNegativo(Errors errors, Venda venda) {
